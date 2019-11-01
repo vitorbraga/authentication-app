@@ -10,6 +10,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import Register from './components/register';
 import Profile from './components/profile';
 import RegisterSuccess from './components/register-success';
+import PrivateRoute from './utils/private-route';
 
 const theme = createMuiTheme({
     palette: {
@@ -41,7 +42,7 @@ export default class App extends React.Component<{}, {}> {
                                     <Route exact path="/" component={Home} />
                                     <Route path="/login" component={LoginContainer} />
                                     <Route path="/register" component={Register} />
-                                    <Route path="/profile" component={Profile} />
+                                    <PrivateRoute path="/profile" component={Profile} />
                                     <Route path="/register-success" component={RegisterSuccess} />
                                     <Route path="/about" component={About} />
                                 </Switch>

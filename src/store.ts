@@ -1,11 +1,13 @@
 import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
 // import thunk from 'redux-thunk';
 import { authenticationReducer } from './modules/authentication/reducer';
+import { userReducer } from './modules/user/reducer';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 const rootReducer = combineReducers({
-    authentication: authenticationReducer
+    authentication: authenticationReducer,
+    user: userReducer
 });
 
 export type AppState = ReturnType<typeof rootReducer>;
@@ -21,6 +23,9 @@ const persistConfig = { key: 'root', storage };
 const initialState: AppState = {
     authentication: {
         authToken: null
+    },
+    user: {
+        userId: null
     }
 };
 

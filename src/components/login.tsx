@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { History, LocationState } from 'history';
+import * as jwtDecode from 'jwt-decode';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -14,10 +15,12 @@ import Container from '@material-ui/core/Container';
 import { authenticate } from '../modules/authentication/api';
 
 import * as theme from './login.scss';
+import { JwtAuthToken } from '../modules/authentication/helpers';
 
 interface LoginProps {
     authToken: string | null;
     setAuthenticationToken: (authToken: string | null) => void;
+    setUserId: (userId: number | null) => void;
     history: History<LocationState>;
 }
 
@@ -40,8 +43,13 @@ export default class Login extends React.Component<LoginProps, LoginState> {
     handleSubmit = async () => {
         const result = await authenticate(this.state.username, this.state.password);
         if (result.success) {
+            const decoded = jwtDecode<JwtAuthToken>(result.jwt);
             this.props.setAuthenticationToken(result.jwt);
+            this.props.setUserId(decoded.userId);
+
             this.props.history.push('/profile');
+        } else {
+            console.log(result);
         }
     }
 

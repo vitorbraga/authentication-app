@@ -1,3 +1,5 @@
+export const SET_USER_ID = 'SET_USER_ID';
+
 export interface UserRegister {
     firstName: string;
     lastName: string;
@@ -26,3 +28,14 @@ export interface UserRegisterResponse {
         };
     };
 }
+
+interface SetUserIdAction {
+    type: typeof SET_USER_ID;
+    payload: number | null;
+}
+
+export interface UserState {
+    userId: number | null;
+}
+
+export type ActionTypes = SetUserIdAction;
