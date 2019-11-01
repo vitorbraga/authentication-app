@@ -61,10 +61,6 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env.CANCUN_DOMAIN': JSON.stringify(process.env['CANCUN_DOMAIN'] || 'cancun.tomtomgroup.com'),
-            'process.env.CANCUN_ENV': JSON.stringify(process.env['CANCUN_ENV'] || 'prod')
-        }),
         new webpack.NormalModuleReplacementPlugin(/^webworkify$/, 'webworkify-webpack'),
         new webpack.ProvidePlugin({
             ReactDOM: 'react-dom',
