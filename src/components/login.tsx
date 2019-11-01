@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { authenticate } from '../modules/authentication/api';
 
-import './login.scss';
+import * as theme from './login.scss';
 
 interface LoginProps {
     authToken: string | null;
@@ -34,7 +34,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 
     render() {
         return (
-            <div className={classNames('container', 'font-style')}>
+            <div className={classNames(theme.container, theme.fontStyle)}>
                 <h1>login</h1>
                 <input type="text" name="username" placeholder="username" onChange={this.handleInputChange('username')} value={this.state.username} />
                 <br />

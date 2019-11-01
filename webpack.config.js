@@ -1,71 +1,86 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-
-const isDevelopment = process.env.NODE_ENV === 'development'
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 module.exports = {
-    entry: {
-        app: ['./src/app/main.tsx', 'webpack-hot-middleware/client'],
-        vendor: ['react', 'react-dom']
-    },
+    context: __dirname,
+    entry: [
+        path.resolve(__dirname, 'src/main.tsx')
+    ],
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'js/[name].bundle.js'
+        filename: 'javascripts/bundle.js',
+        publicPath: '/'
     },
-    devtool: 'source-map',
     resolve: {
-        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.scss']
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.scss', '.json', '.svg', '.ico']
+    },
+    externals: {
+        'mapbox-gl': 'mapboxgl'
     },
     module: {
         rules: [
             {
-                test: /\.(ts|tsx)$/,
-                loader: 'ts-loader'
-            },
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
-            {
-                test: /\.module\.s(a|c)ss$/,
-                loader: [
-                    isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
-                    {
-                    loader: 'css-loader',
+                test: /\.tsx?$/,
+                use: [{
+                    loader: 'ts-loader',
                     options: {
-                        modules: true,
-                        sourceMap: isDevelopment
+                        compiler: 'ttypescript'
                     }
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: isDevelopment
-                        }
+                }],
+                include: [path.resolve(__dirname, 'src')]
+            }, {
+                test: /favicon\.ico$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: 'favicon.ico'
                     }
-                ]
-            },
-            {
-                test: /\.s(a|c)ss$/,
-                exclude: /\.module.(s(a|c)ss)$/,
-                loader: [
-                    isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: isDevelopment
-                        }
+                }],
+                include: [path.resolve(__dirname, 'src')]
+            }, {
+                test: /(.otf|.ttf)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: 'fonts/[name].[ext]'
                     }
-                ]
+                }],
+                include: [path.resolve(__dirname, 'src')]
+            }, {
+                test: /\.gif$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: 'images/[name].[ext]'
+                    }
+                }],
+                include: [path.resolve(__dirname, 'src')]
             }
         ]
     },
     plugins: [
-        new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'src', 'app', 'index.html') }),
-        new webpack.HotModuleReplacementPlugin(),
-        new MiniCssExtractPlugin({
-            filename: isDevelopment ? '[name].css' : '[name].[hash].css',
-            chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css'
+        new webpack.DefinePlugin({
+            'process.env.CANCUN_DOMAIN': JSON.stringify(process.env['CANCUN_DOMAIN'] || 'cancun.tomtomgroup.com'),
+            'process.env.CANCUN_ENV': JSON.stringify(process.env['CANCUN_ENV'] || 'prod')
+        }),
+        new webpack.NormalModuleReplacementPlugin(/^webworkify$/, 'webworkify-webpack'),
+        new webpack.ProvidePlugin({
+            ReactDOM: 'react-dom',
+            React: 'react'
+        }),
+        new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, 'src/index.html'),
+            templateParameters: {
+                mapbox: {
+                    filename: process.env.NODE_ENV === 'production' ? 'mapbox-gl.js' : 'mapbox-gl-dev.js'
+                }
+            }
+        }),
+        new CircularDependencyPlugin({
+            exclude: /node_modules/,
+            failOnError: true
         })
     ]
-}   
+};
