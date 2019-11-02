@@ -1,9 +1,11 @@
+import { Errors } from '../../utils/error-mapper';
+
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 
 export interface LoginResponse {
     success: boolean;
     jwt?: string;
-    error?: string;
+    error?: keyof Errors;
 }
 
 interface SetAuthTokenAction {

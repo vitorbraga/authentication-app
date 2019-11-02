@@ -1,24 +1,34 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Route, Redirect } from 'react-router-dom';
+import { Redirect, Route, RouteProps } from 'react-router';
 import { isAuthenticated } from '../modules/authentication/helpers';
-import { AppState } from '../store';
 import { authToken } from '../modules/authentication/selector';
+import { AppState } from '../store';
 
-const PrivateRoute = ({ component, authToken, ...rest }: any) => {
-    const authenticated = isAuthenticated(authToken);
-    console.log('authtoej', authenticated, authToken);
-    const routeComponent = (props: any) => (
-        authenticated
-            ? React.createElement(component, props)
-            : <Redirect to={{pathname: '/login'}}/>
-    );
+export interface ProtectedRouteProps extends RouteProps {
+    authToken: string | null;
+    authenticationPath: string;
+}
 
-    return <Route {...rest} render={routeComponent}/>;
-};
+export class PrivateRoute extends Route<ProtectedRouteProps> {
+    render() {
+        let redirectPath: string = '';
+        if (!isAuthenticated(this.props.authToken)) {
+            redirectPath = this.props.authenticationPath;
+        }
 
-const mapStateToProps = (state: AppState, ownProps: any) => ({
-    authToken: authToken(state.authentication)
+        if (redirectPath) {
+            const renderComponent = () => (<Redirect to={{ pathname: redirectPath }} />);
+            return <Route {...this.props} component={renderComponent} render={undefined} />;
+        } else {
+            return <Route {...this.props}/>;
+        }
+    }
+}
+
+const mapStateToProps = (state: AppState) => ({
+    authToken: authToken(state.authentication),
+    authenticationPath: '/login'
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

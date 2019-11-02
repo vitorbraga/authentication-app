@@ -13,9 +13,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { authenticate } from '../modules/authentication/api';
+import { JwtAuthToken } from '../modules/authentication/helpers';
+import { errors } from '../utils/error-mapper';
 
 import * as theme from './login.scss';
-import { JwtAuthToken } from '../modules/authentication/helpers';
+import ErrorBox from '../widgets/error-box';
 
 interface LoginProps {
     authToken: string | null;
@@ -25,35 +27,51 @@ interface LoginProps {
 }
 
 interface LoginState {
-    username: string;
+    email: string;
     password: string;
+    loginError: string | null | undefined;
 }
 
 export default class Login extends React.Component<LoginProps, LoginState> {
 
     state: LoginState = {
-        username: '',
-        password: ''
+        email: '',
+        password: '',
+        loginError: null
     };
+
+    isValidBeforeLogin = (): boolean => {
+        const { email, password } = this.state;
+        if (!(email && password)) {
+            return false;
+        }
+
+        return true;
+    }
 
     handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ [field]: event.target.value } as Pick<LoginState, any>);
     }
 
     handleSubmit = async () => {
-        const result = await authenticate(this.state.username, this.state.password);
-        if (result.success) {
-            const decoded = jwtDecode<JwtAuthToken>(result.jwt);
-            this.props.setAuthenticationToken(result.jwt);
-            this.props.setUserId(decoded.userId);
+        if (this.isValidBeforeLogin()) {
+            const result = await authenticate(this.state.email, this.state.password);
+            if (result.success) {
+                const decoded = jwtDecode<JwtAuthToken>(result.jwt);
+                this.props.setAuthenticationToken(result.jwt);
+                this.props.setUserId(decoded.userId);
 
-            this.props.history.push('/profile');
+                this.props.history.push('/profile');
+            } else {
+                this.setState({ loginError: errors[result.error] });
+            }
         } else {
-            console.log(result);
+            this.setState({ loginError: errors.LOGIN_ENTER_EMAIL_PWD });
         }
     }
 
     render() {
+        const { loginError } = this.state;
 
         return (
             <Container component="main" maxWidth="xs">
@@ -65,6 +83,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
+                    {loginError && <ErrorBox errorMessage={this.state.loginError} />}
                     <div className={theme.form}>
                         <TextField
                             variant="outlined"
@@ -73,7 +92,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                             id="email"
                             label="Email Address"
                             name="email"
-                            onChange={this.handleInputChange('username')}
+                            onChange={this.handleInputChange('email')}
                             autoFocus
                         />
                         <TextField

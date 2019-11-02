@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import Home from './components/Home';
 import About from './components/About';
@@ -8,23 +8,22 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './store';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import Register from './components/register';
-import Profile from './components/profile';
 import RegisterSuccess from './components/register-success';
 import PrivateRoute from './utils/private-route';
+import ProfileContainer from './containers/ProfileContainer';
 
 const theme = createMuiTheme({
     palette: {
         primary: {
-            // light: will be calculated from palette.primary.main,
-            main: '#ff4400'
-            // dark: will be calculated from palette.primary.main,
-            // contrastText: will be calculated to contrast with palette.primary.main
+            main: '#00BCD4',
+            light: '#B2EBF2',
+            dark: '#0097A7',
+            contrastText: 'white'
         },
         secondary: {
-            light: '#0066ff',
-            main: '#0044ff',
-            // dark: will be calculated from palette.secondary.main,
-            contrastText: '#ffcc00'
+            main: '#ccc',
+            light: '#e35183',
+            dark: '#78002e'
         }
         // error: will use the default color
     }
@@ -42,7 +41,7 @@ export default class App extends React.Component<{}, {}> {
                                     <Route exact path="/" component={Home} />
                                     <Route path="/login" component={LoginContainer} />
                                     <Route path="/register" component={Register} />
-                                    <PrivateRoute path="/profile" component={Profile} />
+                                    <PrivateRoute path="/profile" component={ProfileContainer} />
                                     <Route path="/register-success" component={RegisterSuccess} />
                                     <Route path="/about" component={About} />
                                 </Switch>

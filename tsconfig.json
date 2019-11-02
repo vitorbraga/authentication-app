@@ -8,6 +8,7 @@
       "preserveConstEnums": true,
       "removeComments": true,
       "sourceMap": true,
+      "noUnusedLocals": true,
       "target": "es2015"
     },
     "include": [
