@@ -13,6 +13,7 @@ import { registerUser } from '../modules/user/api';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { isEmail, checkPasswordComplexity } from '../utils/validators';
 import { errors as errorMapper } from '../utils/error-mapper';
+import { notUndefined } from '../utils/helpers';
 
 import * as theme from './register.scss';
 
@@ -29,9 +30,16 @@ interface RegisterState {
     fieldErrors: ValidationError[];
 }
 
-interface ValidationError {
+interface ValidationError { // TODO put this somewhere else
     field: string;
     errorMessage: string;
+}
+
+interface FormFields {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
 }
 
 export default class Register extends React.Component<RegisterProps, RegisterState> {
@@ -46,11 +54,12 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
     };
 
     isValidBeforeSubmit = (): ValidationError[] => {
-        const validationErrors = ['firstName', 'lastName', 'email', 'password'].map((item: keyof RegisterState) => {
+        const validationErrors = ['firstName', 'lastName', 'email', 'password'].map((item: keyof FormFields) => {
             if (!this.state[item]) {
                 return { field: item, errorMessage: errorMapper.REGISTER_REQUIRED_FIELD };
             }
-        }).filter((item) => item !== undefined);
+
+        }).filter(notUndefined);
 
         if (validationErrors.length > 0) {
             return validationErrors;

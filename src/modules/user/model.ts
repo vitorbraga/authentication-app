@@ -7,19 +7,19 @@ export interface UserRegister {
     password: string;
 }
 
-export interface UserWithoutPassword {
+export interface User {
     id: number;
     firstName: string;
     lastName: string;
     email: string;
-    password: string;
+    role: string;
     createdAt: string;
     updatedAt: string;
 }
 
 export type UserRegisterResponse = {
     success: true;
-    user?: UserWithoutPassword;
+    user?: User;
     error?: never;
     fields?: never;
 } | {
@@ -32,6 +32,16 @@ export type UserRegisterResponse = {
             [type: string]: string;
         };
     }[];
+};
+
+export type GetUserResponse = {
+    success: true;
+    user: User;
+    error: never;
+} | {
+    success: false;
+    user: never;
+    error: string;
 };
 
 interface SetUserIdAction {

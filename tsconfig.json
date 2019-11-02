@@ -9,6 +9,7 @@
       "removeComments": true,
       "sourceMap": true,
       "noUnusedLocals": true,
+      "strictNullChecks": true,
       "target": "es2017"
     },
     "include": [

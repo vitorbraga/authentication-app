@@ -88,7 +88,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    {loginError && <ErrorBox errorMessage={this.state.loginError} />}
+                    {loginError && <ErrorBox errorMessage={loginError} />}
                     {submitLoading && <div className={theme.loadingBox}><CircularProgress /></div>}
                     <div className={theme.form}>
                         <TextField

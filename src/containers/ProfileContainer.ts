@@ -3,11 +3,13 @@ import { Dispatch } from 'redux';
 import { AppState } from '../store';
 import { authToken } from '../modules/authentication/selector';
 import { setAuthToken } from '../modules/authentication/actions';
-import { setUserId } from '../modules/user/actions';
 import Profile from '../components/profile';
+import { userId } from '../modules/user/selector';
+import { setUserId } from '../modules/user/actions';
 
 const mapStateToProps = (state: AppState) => ({
-    authToken: authToken(state.authentication)
+    authToken: authToken(state.authentication),
+    userId: userId(state.user)
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

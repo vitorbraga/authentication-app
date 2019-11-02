@@ -10,5 +10,6 @@ export const errors: Errors = {
     REGISTER_REQUIRED_FIELD: 'This field is required.',
     REGISTER_INVALID_EMAIL: 'Invalid email.',
     REGISTER_PASSWORD_COMPLEXITY: 'Password must be at least 6 characters and it must contain numbers and letters',
-    REGISTER_PASSWORD_SIX_CHARS: 'Password must have at least 6 characters.'
+    REGISTER_PASSWORD_SIX_CHARS: 'Password must have at least 6 characters.',
+    USER_NOT_FOUND: 'User not found.'
 };
