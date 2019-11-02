@@ -17,17 +17,22 @@ export interface UserWithoutPassword {
     updatedAt: string;
 }
 
-export interface UserRegisterResponse {
-    success: boolean;
-    error?: string;
+export type UserRegisterResponse = {
+    success: true;
     user?: UserWithoutPassword;
+    error?: never;
+    fields?: never;
+} | {
+    success: false;
+    user?: never;
+    error?: string;
     fields?: {
         field: string;
         constraints: {
             [type: string]: string;
         };
-    };
-}
+    }[];
+};
 
 interface SetUserIdAction {
     type: typeof SET_USER_ID;

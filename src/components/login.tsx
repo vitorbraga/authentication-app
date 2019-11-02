@@ -12,12 +12,13 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { authenticate } from '../modules/authentication/api';
 import { JwtAuthToken } from '../modules/authentication/helpers';
 import { errors } from '../utils/error-mapper';
+import ErrorBox from '../widgets/error-box';
 
 import * as theme from './login.scss';
-import ErrorBox from '../widgets/error-box';
 
 interface LoginProps {
     authToken: string | null;
@@ -30,6 +31,7 @@ interface LoginState {
     email: string;
     password: string;
     loginError: string | null | undefined;
+    submitLoading: boolean;
 }
 
 export default class Login extends React.Component<LoginProps, LoginState> {
@@ -37,7 +39,8 @@ export default class Login extends React.Component<LoginProps, LoginState> {
     state: LoginState = {
         email: '',
         password: '',
-        loginError: null
+        loginError: null,
+        submitLoading: false
     };
 
     isValidBeforeLogin = (): boolean => {
@@ -53,25 +56,27 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         this.setState({ [field]: event.target.value } as Pick<LoginState, any>);
     }
 
-    handleSubmit = async () => {
+    handleSubmit = () => {
         if (this.isValidBeforeLogin()) {
-            const result = await authenticate(this.state.email, this.state.password);
-            if (result.success) {
-                const decoded = jwtDecode<JwtAuthToken>(result.jwt);
-                this.props.setAuthenticationToken(result.jwt);
-                this.props.setUserId(decoded.userId);
+            this.setState({ submitLoading: true }, async () => {
+                const result = await authenticate(this.state.email, this.state.password);
+                if (result.success) {
+                    const decoded = jwtDecode<JwtAuthToken>(result.jwt);
+                    this.props.setAuthenticationToken(result.jwt);
+                    this.props.setUserId(decoded.userId);
 
-                this.props.history.push('/profile');
-            } else {
-                this.setState({ loginError: errors[result.error] });
-            }
+                    this.props.history.push('/profile');
+                } else {
+                    this.setState({ loginError: errors[result.error], submitLoading: false });
+                }
+            });
         } else {
             this.setState({ loginError: errors.LOGIN_ENTER_EMAIL_PWD });
         }
     }
 
     render() {
-        const { loginError } = this.state;
+        const { loginError, submitLoading } = this.state;
 
         return (
             <Container component="main" maxWidth="xs">
@@ -84,6 +89,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                         Sign in
                     </Typography>
                     {loginError && <ErrorBox errorMessage={this.state.loginError} />}
+                    {submitLoading && <div className={theme.loadingBox}><CircularProgress /></div>}
                     <div className={theme.form}>
                         <TextField
                             variant="outlined"

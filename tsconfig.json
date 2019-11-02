@@ -9,7 +9,7 @@
       "removeComments": true,
       "sourceMap": true,
       "noUnusedLocals": true,
-      "target": "es2015"
+      "target": "es2017"
     },
     "include": [
       "./src/**/**/*"
