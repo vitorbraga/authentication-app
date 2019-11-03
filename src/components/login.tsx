@@ -16,7 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { authenticate } from '../modules/authentication/api';
 import { JwtAuthToken } from '../modules/authentication/helpers';
 import { errors } from '../utils/error-mapper';
-import ErrorBox from '../widgets/error-box';
+import ResultMessageBox from '../widgets/result-message-box';
 
 import * as theme from './login.scss';
 
@@ -88,7 +88,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    {loginError && <ErrorBox errorMessage={loginError} />}
+                    {loginError && <ResultMessageBox type="error" message={loginError} />}
                     {submitLoading && <div className={theme.loadingBox}><CircularProgress /></div>}
                     <div className={theme.form}>
                         <TextField

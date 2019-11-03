@@ -13,9 +13,13 @@ export const errors: Errors = {
     REGISTER_PASSWORD_SIX_CHARS: 'Password must have at least 6 characters.',
     USER_NOT_FOUND: 'User not found.',
     PASSWORD_RESET_MISSING_EMAIL: 'Please provide an email.',
-    PASSWORD_RESET_USER_NOT_FOUND: 'We could not find the user with the provided email.',
+    PASSWORD_RESET_USER_NOT_FOUND: 'We could not find a user with the provided email.',
     PASSWORD_RESET_REQUIRED_FIELDS: 'Required fields.',
     PASSWORDS_DO_NOT_MATCH: 'Passwords do not match.',
-    PASSWORD_TOKEN_REQUIRED: 'Password token is required.',
-    PASSWORD_TOKEN_EXPIRED: 'Password token expired'
+    PASSWORD_TOKEN_REQUIRED: 'Password token is required.', // TODO fix this message
+    PASSWORD_USER_ID_REQUIRED: 'Password user id required', // TODO fix this message
+    PASSWORD_TOKEN_EXPIRED: 'Password token expired',
+    EMAIL_INVALID: 'Email address is invalid. Please enter a valid email address.',
+    PASSWORD_RESET_BAD_USER_ID: 'Bad user ID.',
+    PASSWORD_RESET_TOKEN_AND_ID_NOT_MATCH: 'Token and user ID do not match.' // TODO fix this message
 };

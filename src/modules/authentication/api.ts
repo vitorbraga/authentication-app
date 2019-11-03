@@ -27,11 +27,11 @@ export const passwordReset = async (email: string): Promise<PasswordResetRespons
     return data;
 };
 
-export const checkValidPasswordResetToken = async (token: string): Promise<CheckPasswordTokenResponse> => {
+export const checkValidPasswordResetToken = async (token: string, userId: string): Promise<CheckPasswordTokenResponse> => {
     const options = {
         headers: headersBuilder().with('Content-Type', 'application/json').with('Accept', 'application/json').build()
     };
-    const response = await fetch(`${SERVER_BASE_URL}/auth/check-password-token/${token}`, options);
+    const response = await fetch(`${SERVER_BASE_URL}/auth/check-password-token/${token}/${userId}`, options);
     const data = await response.json();
 
     return data;

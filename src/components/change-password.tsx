@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as qs from 'query-string';
 import { RouteComponentProps } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -9,14 +10,14 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { errors } from '../utils/error-mapper';
-import ErrorBox from '../widgets/error-box';
 import { checkValidPasswordResetToken } from '../modules/authentication/api';
-import * as qs from 'query-string';
+import ResultMessageBox from '../widgets/result-message-box';
 
 import * as theme from './change-password.scss';
 
 interface MatchParams {
     token: string;
+    u: string;
 }
 
 interface ChangePasswordProps extends RouteComponentProps<MatchParams> {
@@ -41,12 +42,16 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
     };
 
     componentDidMount = async () => {
-        const token = qs.parse(this.props.location.search).token;
-        if (token) {
-            const response = await checkValidPasswordResetToken(token.toString());
+        const parsedUrl = qs.parse(this.props.location.search);
+        const token = parsedUrl.token;
+        const userId = parsedUrl.u;
+        if (token && userId) {
+            const response = await checkValidPasswordResetToken(token.toString(), userId.toString());
+            console.log(response.error);
             this.setState({ tokenIsValid: response.success });
         } else {
-            // TODO token not found in URL
+            // TODO token or userId not found in URL
+            // TODO show errors
         }
     }
 
@@ -67,6 +72,7 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
             return;
         }
 
+        // TODO request to change password (need to implement backend first)
         console.log('change password', newPassword, newPasswordRepeat);
     }
 
@@ -86,7 +92,7 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
                         <Typography component="h1" variant="h5">
                             Change password
                         </Typography>
-                        {submitError && <ErrorBox errorMessage={submitError} />}
+                        {submitError && <ResultMessageBox type="error" message={submitError} />}
                         {submitLoading && <div className={theme.loadingBox}><CircularProgress /></div>}
                         <div className={theme.form}>
                             <TextField
