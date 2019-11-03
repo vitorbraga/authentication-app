@@ -14,8 +14,3 @@ export function headersBuilder() {
 
     return builder;
 }
-
-// TODO separate this correctly
-export function notUndefined<T>(x: T | undefined): x is T {
-    return x !== undefined;
-}

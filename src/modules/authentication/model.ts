@@ -12,6 +12,22 @@ export type LoginResponse = {
     error: keyof Errors;
 };
 
+export type PasswordResetResponse = {
+    success: true;
+    error: never;
+} | {
+    success: false;
+    error: keyof Errors;
+};
+
+export type CheckPasswordTokenResponse = {
+    success: true;
+    error: never;
+} | {
+    success: false;
+    error: keyof Errors;
+};
+
 interface SetAuthTokenAction {
     type: typeof SET_AUTH_TOKEN;
     payload: string | null;

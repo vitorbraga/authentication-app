@@ -11,9 +11,9 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { registerUser } from '../modules/user/api';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { isEmail, checkPasswordComplexity } from '../utils/validators';
+import { checkPasswordComplexity, isEmail } from '../utils/validators';
 import { errors as errorMapper } from '../utils/error-mapper';
-import { notUndefined } from '../utils/helpers';
+import { notUndefined } from '../utils/common-helper';
 
 import * as theme from './register.scss';
 

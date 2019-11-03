@@ -1,5 +1,5 @@
 import { UserRegister, UserRegisterResponse, GetUserResponse } from './model';
-import { headersBuilder } from '../../utils/helpers';
+import { headersBuilder } from '../../utils/api-helper';
 
 const SERVER_BASE_URL = 'http://localhost:4000';
 

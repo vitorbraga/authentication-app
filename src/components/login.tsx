@@ -127,7 +127,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                         </Button>
                         <Grid container style={{ marginTop: '10px' }}>
                             <Grid item xs>
-                                <Link to={'/password-forgot'}>
+                                <Link to={'/password-reset'}>
                                     Forgot password?
                                 </Link>
                             </Grid>
