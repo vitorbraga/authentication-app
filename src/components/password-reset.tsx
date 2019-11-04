@@ -9,12 +9,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { passwordReset } from '../modules/authentication/api';
+import { passwordRecovery } from '../modules/authentication/api';
 import ResultMessageBox from '../widgets/result-message-box';
 import { errors } from '../utils/error-mapper';
+import { isEmail } from '../utils/validators';
 
 import * as theme from './password-reset.scss';
-import { isEmail } from '../utils/validators';
 
 interface PasswordResetProps {
     history: History<LocationState>;
@@ -51,7 +51,7 @@ export default class PasswordReset extends React.Component<PasswordResetProps, P
             }
 
             this.setState({ submitLoading: true, emailFieldError: '', submitError: '' }, async () => {
-                const response = await passwordReset(email);
+                const response = await passwordRecovery(email);
                 if (response.success) {
                     this.setState({ passwordResetProcessed: true, submitLoading: false });
                 } else {

@@ -12,7 +12,7 @@ export type LoginResponse = {
     error: keyof Errors;
 };
 
-export type PasswordResetResponse = {
+export type BaseResponse = {
     success: true;
     error: never;
 } | {
@@ -20,13 +20,11 @@ export type PasswordResetResponse = {
     error: keyof Errors;
 };
 
-export type CheckPasswordTokenResponse = {
-    success: true;
-    error: never;
-} | {
-    success: false;
-    error: keyof Errors;
-};
+export type PasswordRecoveryResponse = BaseResponse;
+
+export type ChangePasswordTokenResponse = BaseResponse;
+
+export type CheckPasswordTokenResponse = BaseResponse;
 
 interface SetAuthTokenAction {
     type: typeof SET_AUTH_TOKEN;

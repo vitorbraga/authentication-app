@@ -6,13 +6,13 @@ import * as theme from './result-message-box.scss';
 
 interface ResultMessageBoxProps {
     type: 'success' | 'error' | 'warning';
-    message: string;
+    message?: string;
 }
 
-const ResultMessageBox: React.SFC<ResultMessageBoxProps> = ({ message, type }) => {
+const ResultMessageBox: React.SFC<ResultMessageBoxProps> = ({ message, type, children }) => {
     return (
         <Box mt={2} className={classNames(theme.resultMessageBox, theme[type])}>
-            <span>{message}</span>
+            {children || <span>{message}</span>}
         </Box>
     );
 };

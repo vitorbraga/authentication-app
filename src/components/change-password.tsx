@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { errors } from '../utils/error-mapper';
-import { checkValidPasswordResetToken } from '../modules/authentication/api';
+import { checkValidPasswordResetToken, changePasswordWithToken } from '../modules/authentication/api';
 import ResultMessageBox from '../widgets/result-message-box';
 
 import * as theme from './change-password.scss';
@@ -26,9 +26,10 @@ interface ChangePasswordProps extends RouteComponentProps<MatchParams> {
 interface ChangePasswordState {
     newPassword: string;
     newPasswordRepeat: string;
-    submitLoading: boolean;
     submitError: string | null | undefined;
+    submitStage: 'initial' | 'submitting' | 'success';
     tokenIsValid: boolean | undefined;
+    tokenCheckError: string;
 }
 
 export default class ChangePassword extends React.Component<ChangePasswordProps, ChangePasswordState> {
@@ -36,22 +37,26 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
     state: ChangePasswordState = {
         newPassword: '',
         newPasswordRepeat: '',
-        submitLoading: false,
         submitError: '',
-        tokenIsValid: undefined
+        tokenIsValid: undefined,
+        tokenCheckError: '',
+        submitStage: 'initial'
     };
 
     componentDidMount = async () => {
+        document.title = 'Change password';
         const parsedUrl = qs.parse(this.props.location.search);
         const token = parsedUrl.token;
         const userId = parsedUrl.u;
         if (token && userId) {
             const response = await checkValidPasswordResetToken(token.toString(), userId.toString());
-            console.log(response.error);
-            this.setState({ tokenIsValid: response.success });
+            if (response.success) {
+                this.setState({ tokenIsValid: true });
+            } else {
+                this.setState({ tokenIsValid: false, tokenCheckError: errors[response.error] });
+            }
         } else {
-            // TODO token or userId not found in URL
-            // TODO show errors
+            this.setState({ tokenIsValid: false, tokenCheckError: errors.PASSWORD_RESET_MISSING_TOKEN_USERID });
         }
     }
 
@@ -72,12 +77,22 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
             return;
         }
 
-        // TODO request to change password (need to implement backend first)
-        console.log('change password', newPassword, newPasswordRepeat);
+        this.setState({ submitStage: 'submitting', submitError: '' }, async () => {
+            const parsedUrl = qs.parse(this.props.location.search);
+            const token = parsedUrl.token;
+            const userId = parsedUrl.u;
+            const response = await changePasswordWithToken(newPassword, token!.toString(), userId!.toString());
+
+            if (response.success) {
+                this.setState({ submitStage: 'success' });
+            } else {
+                this.setState({ submitStage: 'initial', submitError: errors[response.error] });
+            }
+        });
     }
 
     render() {
-        const { submitError, submitLoading, tokenIsValid } = this.state;
+        const { submitError, tokenIsValid, tokenCheckError, submitStage } = this.state;
 
         if (tokenIsValid === undefined) {
             return null;
@@ -93,44 +108,65 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
                             Change password
                         </Typography>
                         {submitError && <ResultMessageBox type="error" message={submitError} />}
-                        {submitLoading && <div className={theme.loadingBox}><CircularProgress /></div>}
-                        <div className={theme.form}>
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                fullWidth
-                                name="newPassword"
-                                label="New password"
-                                type="password"
-                                id="newPassword"
-                                onChange={this.handleInputChange('newPassword')}
-                            />
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                fullWidth
-                                name="newPasswordRepeat"
-                                label="Repeat new password"
-                                type="password"
-                                id="newPasswordRepeat"
-                                onChange={this.handleInputChange('newPasswordRepeat')}
-                            />
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                onClick={this.handleSubmit}
-                                className={theme.submit}
-                            >
-                                Submit
-                            </Button>
-                        </div>
+                        {submitStage === 'submitting' && 
+                            <div className={theme.loadingBox}><CircularProgress /></div>
+                        }
+                        {submitStage === 'success' &&
+                            <div>
+                                <ResultMessageBox type="success">
+                                    Your password has been changed successfully! <br />Click <a href='http://localhost:3000/login'>here</a> to login.
+                                </ResultMessageBox>
+                            </div>
+                        }
+                        {submitStage === 'initial' &&
+                            <div className={theme.form}>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    name="newPassword"
+                                    label="New password"
+                                    type="password"
+                                    id="newPassword"
+                                    onChange={this.handleInputChange('newPassword')}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    name="newPasswordRepeat"
+                                    label="Repeat new password"
+                                    type="password"
+                                    id="newPasswordRepeat"
+                                    onChange={this.handleInputChange('newPasswordRepeat')}
+                                />
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={this.handleSubmit}
+                                    className={theme.submit}
+                                >
+                                    Submit
+                                </Button>
+                            </div>
+                        }    
                     </div>
                 </Container>
             );
         } else {
-            return <div>Token is not valid. Try again.</div>;
+            return (
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline />
+                    <div className={theme.paper}>
+                        <Typography component="h1" variant="h5">
+                            Invalid information
+                        </Typography>
+                        <ResultMessageBox type="error" message={tokenCheckError} />
+                    </div>
+                </Container>
+            );
         }
     }
 }

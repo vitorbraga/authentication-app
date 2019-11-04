@@ -1,4 +1,4 @@
-import { LoginResponse, PasswordResetResponse, CheckPasswordTokenResponse } from './model';
+import { LoginResponse, PasswordRecoveryResponse, CheckPasswordTokenResponse, ChangePasswordTokenResponse } from './model';
 import { headersBuilder } from '../../utils/api-helper';
 
 const SERVER_BASE_URL = 'http://localhost:4000';
@@ -15,13 +15,25 @@ export const authenticate = async (username: string, password: string): Promise<
     return data;
 };
 
-export const passwordReset = async (email: string): Promise<PasswordResetResponse> => {
+export const passwordRecovery = async (email: string): Promise<PasswordRecoveryResponse> => {
     const options = {
         headers: headersBuilder().with('Content-Type', 'application/json').with('Accept', 'application/json').build(),
         method: 'POST',
         body: JSON.stringify({ email })
     };
-    const response = await fetch(`${SERVER_BASE_URL}/auth/password-reset`, options);
+    const response = await fetch(`${SERVER_BASE_URL}/auth/password-recovery`, options);
+    const data = await response.json();
+
+    return data;
+};
+
+export const changePasswordWithToken = async (newPassword: string, token: string, userId: string): Promise<ChangePasswordTokenResponse> => {
+    const options = {
+        headers: headersBuilder().with('Content-Type', 'application/json').with('Accept', 'application/json').build(),
+        method: 'POST',
+        body: JSON.stringify({ newPassword, token, userId })
+    };
+    const response = await fetch(`${SERVER_BASE_URL}/auth/reset-password`, options);
     const data = await response.json();
 
     return data;
