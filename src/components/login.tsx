@@ -75,6 +75,12 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         }
     }
 
+    handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            this.handleSubmit();
+        }
+    }
+
     render() {
         const { loginError, submitLoading } = this.state;
 
@@ -98,6 +104,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                             id="email"
                             label="Email Address"
                             name="email"
+                            onKeyUp={this.handleKeyUp}
                             onChange={this.handleInputChange('email')}
                             autoFocus
                         />
@@ -109,6 +116,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                             label="Password"
                             type="password"
                             id="password"
+                            onKeyUp={this.handleKeyUp}
                             onChange={this.handleInputChange('password')}
                         />
                         <FormControlLabel
@@ -127,7 +135,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                         </Button>
                         <Grid container style={{ marginTop: '10px' }}>
                             <Grid item xs>
-                                <Link to={'/password-reset'}>
+                                <Link to={'/password-recovery'}>
                                     Forgot password?
                                 </Link>
                             </Grid>

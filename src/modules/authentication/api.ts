@@ -1,7 +1,5 @@
 import { LoginResponse, PasswordRecoveryResponse, CheckPasswordTokenResponse, ChangePasswordTokenResponse } from './model';
-import { headersBuilder } from '../../utils/api-helper';
-
-const SERVER_BASE_URL = 'http://localhost:4000';
+import { headersBuilder, baseUrl } from '../../utils/api-helper';
 
 export const authenticate = async (username: string, password: string): Promise<LoginResponse> => {
     const options = {
@@ -9,7 +7,7 @@ export const authenticate = async (username: string, password: string): Promise<
         method: 'POST',
         body: JSON.stringify({ username, password })
     };
-    const response = await fetch(`${SERVER_BASE_URL}/auth/login`, options);
+    const response = await fetch(`${baseUrl}/auth/login`, options);
     const data = await response.json();
 
     return data;
@@ -21,7 +19,7 @@ export const passwordRecovery = async (email: string): Promise<PasswordRecoveryR
         method: 'POST',
         body: JSON.stringify({ email })
     };
-    const response = await fetch(`${SERVER_BASE_URL}/auth/password-recovery`, options);
+    const response = await fetch(`${baseUrl}/auth/password-recovery`, options);
     const data = await response.json();
 
     return data;
@@ -33,7 +31,7 @@ export const changePasswordWithToken = async (newPassword: string, token: string
         method: 'POST',
         body: JSON.stringify({ newPassword, token, userId })
     };
-    const response = await fetch(`${SERVER_BASE_URL}/auth/reset-password`, options);
+    const response = await fetch(`${baseUrl}/auth/password-recovery`, options);
     const data = await response.json();
 
     return data;
@@ -43,7 +41,7 @@ export const checkValidPasswordResetToken = async (token: string, userId: string
     const options = {
         headers: headersBuilder().with('Content-Type', 'application/json').with('Accept', 'application/json').build()
     };
-    const response = await fetch(`${SERVER_BASE_URL}/auth/check-password-token/${token}/${userId}`, options);
+    const response = await fetch(`${baseUrl}/auth/check-password-token/${token}/${userId}`, options);
     const data = await response.json();
 
     return data;

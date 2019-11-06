@@ -2,6 +2,14 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
+const dotenv = require('dotenv');
+
+const env = dotenv.config().parsed;
+
+const envKeys = Object.keys(env).reduce((prev, next) => {
+    prev[`process.env.${next}`] = JSON.stringify(env[next]);
+    return prev;
+}, {});
 
 module.exports = {
     context: __dirname,
@@ -15,9 +23,6 @@ module.exports = {
     },
     resolve: {
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.scss', '.json', '.svg', '.ico']
-    },
-    externals: {
-        'mapbox-gl': 'mapboxgl'
     },
     module: {
         rules: [
@@ -67,16 +72,12 @@ module.exports = {
             React: 'react'
         }),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, 'src/index.html'),
-            templateParameters: {
-                mapbox: {
-                    filename: process.env.NODE_ENV === 'production' ? 'mapbox-gl.js' : 'mapbox-gl-dev.js'
-                }
-            }
+            template: path.resolve(__dirname, 'src/index.html')
         }),
         new CircularDependencyPlugin({
             exclude: /node_modules/,
             failOnError: true
-        })
+        }),
+        new webpack.DefinePlugin(envKeys)
     ]
 };

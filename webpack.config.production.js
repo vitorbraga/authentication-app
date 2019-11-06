@@ -68,6 +68,9 @@ module.exports = Object.assign({}, config, {
         new MiniCssExtractPlugin({
             filename: 'stylesheets/[name].[hash].css',
             chunkFilename: 'stylesheets/[id].[hash].css',
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production')
         })
     ]),
     optimization: {

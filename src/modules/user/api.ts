@@ -1,7 +1,5 @@
 import { UserRegister, UserRegisterResponse, GetUserResponse } from './model';
-import { headersBuilder } from '../../utils/api-helper';
-
-const SERVER_BASE_URL = 'http://localhost:4000';
+import { headersBuilder, baseUrl } from '../../utils/api-helper';
 
 export const registerUser = async (user: UserRegister): Promise<UserRegisterResponse> => {
     const options = {
@@ -9,7 +7,7 @@ export const registerUser = async (user: UserRegister): Promise<UserRegisterResp
         method: 'POST',
         body: JSON.stringify(user)
     };
-    const response = await fetch(`${SERVER_BASE_URL}/user`, options);
+    const response = await fetch(`${baseUrl}/user`, options);
     const data = await response.json();
 
     return data;
@@ -19,7 +17,7 @@ export const getUser = async (userId: number, authToken: string): Promise<GetUse
     const options = {
         headers: headersBuilder().withJwt(authToken).build()
     };
-    const response = await fetch(`${SERVER_BASE_URL}/user/${userId}`, options);
+    const response = await fetch(`${baseUrl}/user/${userId}`, options);
     const data = await response.json();
 
     return data;

@@ -14,7 +14,7 @@ import ResultMessageBox from '../widgets/result-message-box';
 import { errors } from '../utils/error-mapper';
 import { isEmail } from '../utils/validators';
 
-import * as theme from './password-reset.scss';
+import * as theme from './password-recovery.scss';
 
 interface PasswordResetProps {
     history: History<LocationState>;
@@ -85,34 +85,36 @@ export default class PasswordReset extends React.Component<PasswordResetProps, P
                             message="We sent a password reset link to your email address, which allows you to reset your password."
                         />
                     }
-                    <div className={theme.form}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    autoComplete="email"
-                                    error={emailFieldError !== ''}
-                                    helperText={emailFieldError !== '' && emailFieldError}
-                                    onChange={this.handleInputChange('email')}
-                                />
+                    {!passwordResetProcessed &&
+                        <div className={theme.form}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        label="Email Address"
+                                        autoComplete="email"
+                                        error={emailFieldError !== ''}
+                                        helperText={emailFieldError !== '' && emailFieldError}
+                                        onChange={this.handleInputChange('email')}
+                                    />
+                                </Grid>
                             </Grid>
-                        </Grid>
-                        <div className={theme.submitWrapper}>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                onClick={this.handleSubmit}
-                            >
-                                Submit
-                            </Button>
+                            <div className={theme.submitWrapper}>
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={this.handleSubmit}
+                                >
+                                    Submit
+                                </Button>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </Container>
         );

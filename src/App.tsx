@@ -11,7 +11,7 @@ import Register from './components/register';
 import RegisterSuccess from './components/register-success';
 import PrivateRoute from './utils/private-route';
 import ProfileContainer from './containers/ProfileContainer';
-import PasswordRecovery from './components/password-reset';
+import PasswordRecovery from './components/password-recovery';
 import ChangePassword from './components/change-password';
 
 const theme = createMuiTheme({
@@ -46,7 +46,7 @@ export default class App extends React.Component<{}, {}> {
                                     <PrivateRoute path="/profile" component={ProfileContainer} />
                                     <Route path="/register-success" component={RegisterSuccess} />
                                     <Route path="/about" component={About} />
-                                    <Route path="/password-reset" component={PasswordRecovery} />
+                                    <Route path="/password-recovery" component={PasswordRecovery} />
                                     <Route path="/change-password" component={ChangePassword} />
                                 </Switch>
                             </div>
