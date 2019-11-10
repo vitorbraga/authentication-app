@@ -58,7 +58,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 
     handleSubmit = () => {
         if (this.isValidBeforeLogin()) {
-            this.setState({ submitLoading: true }, async () => {
+            this.setState({ submitLoading: true, loginError: null }, async () => {
                 const result = await authenticate(this.state.email, this.state.password);
                 if (result.success) {
                     const decoded = jwtDecode<JwtAuthToken>(result.jwt);

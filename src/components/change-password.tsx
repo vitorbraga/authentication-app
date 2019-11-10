@@ -14,6 +14,7 @@ import { checkValidPasswordResetToken, changePasswordWithToken } from '../module
 import ResultMessageBox from '../widgets/result-message-box';
 
 import * as theme from './change-password.scss';
+import { appBaseUrl } from '../utils/api-helper';
 
 interface MatchParams {
     token: string;
@@ -93,6 +94,7 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
 
     render() {
         const { submitError, tokenIsValid, tokenCheckError, submitStage } = this.state;
+        const loginUrl = `${appBaseUrl}/login`;
 
         if (tokenIsValid === undefined) {
             return null;
@@ -108,13 +110,13 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
                             Change password
                         </Typography>
                         {submitError && <ResultMessageBox type="error" message={submitError} />}
-                        {submitStage === 'submitting' && 
+                        {submitStage === 'submitting' &&
                             <div className={theme.loadingBox}><CircularProgress /></div>
                         }
                         {submitStage === 'success' &&
                             <div>
                                 <ResultMessageBox type="success">
-                                    Your password has been changed successfully! <br />Click <a href='http://localhost:3000/login'>here</a> to login.
+                                    Your password has been changed successfully! <br />Click <a href={loginUrl}>here</a> to login.
                                 </ResultMessageBox>
                             </div>
                         }
@@ -151,7 +153,7 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
                                     Submit
                                 </Button>
                             </div>
-                        }    
+                        }
                     </div>
                 </Container>
             );

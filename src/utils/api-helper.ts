@@ -1,4 +1,5 @@
-export const baseUrl = process.env.REACT_APP_SERVER_BASE_URL || 'http://localhost:4000';
+export const serverBaseUrl = process.env.SERVER_BASE_URL || 'http://localhost:4000';
+export const appBaseUrl = process.env.APP_BASE_URL || 'http://localhost:3000';
 
 export interface Builder {
     withJwt: (token: string) => Builder;

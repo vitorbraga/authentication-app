@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import { AppState } from '../store';
 import { authToken } from '../modules/authentication/selector';
 import { setAuthToken } from '../modules/authentication/actions';
-import Profile from '../components/profile';
+import Profile from '../components/profile/profile';
 import { userId } from '../modules/user/selector';
 import { setUserId } from '../modules/user/actions';
 

@@ -125,11 +125,9 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
-                                    autoComplete="fname"
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    id="firstName"
                                     label="First Name"
                                     error={!!firstNameValidationError}
                                     helperText={firstNameValidationError && firstNameValidationError.errorMessage}
@@ -142,7 +140,6 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    id="lastName"
                                     label="Last Name"
                                     error={!!lastNameValidationError}
                                     helperText={lastNameValidationError && lastNameValidationError.errorMessage}
