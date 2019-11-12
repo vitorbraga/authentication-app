@@ -1,6 +1,7 @@
 import { UserMessage } from '../../utils/messages-mapper';
 
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
+export const USER_LOGOUT = 'USER_LOGOUT';
 
 export type LoginResponse = {
     success: true;
@@ -31,8 +32,12 @@ interface SetAuthTokenAction {
     payload: string | null;
 }
 
+interface UserLogoutAction {
+    type: typeof USER_LOGOUT;
+}
+
 export interface AuthenticationState {
     authToken: string | null;
 }
 
-export type ActionTypes = SetAuthTokenAction;
+export type ActionTypes = SetAuthTokenAction | UserLogoutAction;

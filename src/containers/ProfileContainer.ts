@@ -2,10 +2,10 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { AppState } from '../store';
 import { authToken } from '../modules/authentication/selector';
-import { setAuthToken } from '../modules/authentication/actions';
+import { userLogout } from '../modules/authentication/actions';
 import Profile from '../components/profile/profile';
 import { userId, user } from '../modules/user/selector';
-import { setUserId, setUser } from '../modules/user/actions';
+import { setUser } from '../modules/user/actions';
 import { User } from '../modules/user/model';
 
 const mapStateToProps = (state: AppState) => ({
@@ -15,9 +15,8 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    setAuthenticationToken: (authToken: string | null) => dispatch(setAuthToken(authToken)),
-    setUserId: (userId: number | null) => dispatch(setUserId(userId)),
-    setUser: (user: User | null) => dispatch(setUser(user))
+    setUser: (user: User | null) => dispatch(setUser(user)),
+    userLogout: () => dispatch(userLogout())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

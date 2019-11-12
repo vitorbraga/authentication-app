@@ -51,9 +51,8 @@ interface ProfileProps {
     authToken: string | null;
     userId: number | null;
     user: User | null;
-    setAuthenticationToken: (authToken: string | null) => void;
-    setUserId: (userId: number | null) => void;
     setUser: (user: User | null) => void;
+    userLogout: () => void;
     history: History<LocationState>;
 }
 
@@ -125,11 +124,7 @@ export default class Profile extends React.Component<ProfileProps, ProfileState>
     }
 
     handleLogout = () => {
-        // TODO find a better way to reset everything
-        this.props.setAuthenticationToken(null);
-        this.props.setUserId(null);
-        this.props.setUser(null);
-
+        this.props.userLogout();
         this.props.history.push('/');
     }
 

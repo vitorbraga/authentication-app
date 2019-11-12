@@ -1,22 +1,31 @@
-import { compose, createStore, combineReducers } from 'redux';
+import { compose, createStore, combineReducers, Action } from 'redux';
 // import thunk from 'redux-thunk';
 import { authenticationReducer } from './modules/authentication/reducer';
 import { userReducer } from './modules/user/reducer';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-const rootReducer = combineReducers({
-    authentication: authenticationReducer,
-    user: userReducer
-});
-
-export type AppState = ReturnType<typeof rootReducer>;
-
 declare global {
     interface Window {
       __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
     }
 }
+
+const appReducer = combineReducers({
+    authentication: authenticationReducer,
+    user: userReducer
+});
+
+const rootReducer = (state: any, action: Action) => {
+    if (action.type === 'USER_LOGOUT') {
+        console.log('USER_LOGOUT');
+        state = initialState;
+    }
+
+    return appReducer(state, action);
+};
+
+export type AppState = ReturnType<typeof rootReducer>;
 
 const persistConfig = { key: 'root', storage };
 
