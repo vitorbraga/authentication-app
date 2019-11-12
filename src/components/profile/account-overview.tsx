@@ -36,7 +36,7 @@ export default class AccountOverview extends React.Component<AccountOverviewProp
                     </div>
                     <div className={theme.dataRow}>
                         <div className={theme.label}>Account last updated at:</div>
-                        <div className={theme.value}>{formatDateFromString(user.createdAt)}</div>
+                        <div className={theme.value}>{formatDateFromString(user.updatedAt)}</div>
                     </div>
                 </div>
             </div>
