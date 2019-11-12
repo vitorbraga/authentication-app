@@ -12,7 +12,7 @@ import Container from '@material-ui/core/Container';
 import { registerUser } from '../modules/user/api';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { checkPasswordComplexity, isEmail } from '../utils/validators';
-import { errors as errorMapper } from '../utils/error-mapper';
+import { errorMapper, ValidationError } from '../utils/messages-mapper';
 import { notUndefined } from '../utils/common-helper';
 
 import * as theme from './register.scss';
@@ -28,11 +28,6 @@ interface RegisterState {
     password: string;
     submitLoading: boolean;
     fieldErrors: ValidationError[];
-}
-
-interface ValidationError { // TODO put this somewhere else
-    field: string;
-    errorMessage: string;
 }
 
 interface FormFields {
@@ -53,7 +48,7 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
         fieldErrors: []
     };
 
-    isValidBeforeSubmit = (): ValidationError[] => {
+    isValidBeforeSubmit(): ValidationError[] {
         const validationErrors = ['firstName', 'lastName', 'email', 'password'].map((item: keyof FormFields) => {
             if (!this.state[item]) {
                 return { field: item, errorMessage: errorMapper.REGISTER_REQUIRED_FIELD };
@@ -104,11 +99,11 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
     }
 
     render() {
-        const { submitLoading } = this.state;
-        const firstNameValidationError = this.state.fieldErrors.find((item) => item.field === 'firstName');
-        const lastNameValidationError = this.state.fieldErrors.find((item) => item.field === 'lastName');
-        const emailValidationError = this.state.fieldErrors.find((item) => item.field === 'email');
-        const passwordValidationError = this.state.fieldErrors.find((item) => item.field === 'password');
+        const { fieldErrors, submitLoading } = this.state;
+        const firstNameValidationError = fieldErrors.find((item) => item.field === 'firstName');
+        const lastNameValidationError = fieldErrors.find((item) => item.field === 'lastName');
+        const emailValidationError = fieldErrors.find((item) => item.field === 'email');
+        const passwordValidationError = fieldErrors.find((item) => item.field === 'password');
 
         return (
             <Container component="main" maxWidth="xs">

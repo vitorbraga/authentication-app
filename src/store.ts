@@ -25,7 +25,8 @@ const initialState: AppState = {
         authToken: null
     },
     user: {
-        userId: null
+        userId: null,
+        user: null
     }
 };
 

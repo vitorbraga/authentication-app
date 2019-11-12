@@ -1,10 +1,16 @@
 export const SET_USER_ID = 'SET_USER_ID';
+export const SET_USER = 'SET_USER';
 
 export interface UserRegister {
     firstName: string;
     lastName: string;
     email: string;
     password: string;
+}
+
+export interface UserUpdate {
+    firstName: string;
+    lastName: string;
 }
 
 export interface User {
@@ -19,12 +25,12 @@ export interface User {
 
 export type UserRegisterResponse = {
     success: true;
-    user?: User;
-    error?: never;
-    fields?: never;
+    user: User;
+    error: never;
+    fields: never;
 } | {
     success: false;
-    user?: never;
+    user: never;
     error?: string;
     fields?: {
         field: string;
@@ -33,6 +39,8 @@ export type UserRegisterResponse = {
         };
     }[];
 };
+
+export type UserUpdateResponse = UserRegisterResponse;
 
 export type GetUserResponse = {
     success: true;
@@ -44,13 +52,12 @@ export type GetUserResponse = {
     error: string;
 };
 
-interface SetUserIdAction {
-    type: typeof SET_USER_ID;
-    payload: number | null;
-}
+interface SetUserIdAction { type: typeof SET_USER_ID; payload: number | null; }
+interface SetUserAction { type: typeof SET_USER; payload: User | null; }
 
 export interface UserState {
     userId: number | null;
+    user: User | null;
 }
 
-export type ActionTypes = SetUserIdAction;
+export type ActionTypes = SetUserIdAction | SetUserAction;

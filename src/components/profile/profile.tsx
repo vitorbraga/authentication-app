@@ -15,35 +15,16 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
+import { TypographyProps } from '@material-ui/system';
 import { User } from '../../modules/user/model';
 import { getUser } from '../../modules/user/api';
 import AccountOverview from './account-overview';
 import PersonalInfo from './personal-info';
 import ChangePassword from './change-password';
+import ResultMessageBox from '../../widgets/result-message-box';
+import { errorMapper } from '../../utils/messages-mapper';
 
 import * as theme from './profile.scss';
-import { TypographyProps } from '@material-ui/system';
-
-interface ProfileProps {
-    authToken: string | null;
-    userId: number | null;
-    setAuthenticationToken: (authToken: string | null) => void;
-    setUserId: (userId: number | null) => void;
-    history: History<LocationState>;
-}
-
-interface ProfileState {
-    loading: boolean;
-    user: User | null;
-    anchorEl: Element | null;
-    tabValue: number;
-}
-
-interface TabPanelProps extends TypographyProps {
-    value: number;
-    index: number;
-    children: React.ReactNode;
-}
 
 const TabPanel = (props: TabPanelProps) => {
     const { children, value, index, ...other } = props;
@@ -66,25 +47,68 @@ const CustomTab = withStyles(() => ({
     wrapper: { alignItems: 'start' }
 }))(Tab);
 
+interface ProfileProps {
+    authToken: string | null;
+    userId: number | null;
+    user: User | null;
+    setAuthenticationToken: (authToken: string | null) => void;
+    setUserId: (userId: number | null) => void;
+    setUser: (user: User | null) => void;
+    history: History<LocationState>;
+}
+
+interface ProfileState {
+    loading: boolean;
+    anchorEl: Element | null;
+    tabValue: number;
+    error: string;
+}
+
+interface TabPanelProps extends TypographyProps {
+    value: number;
+    index: number;
+    children: React.ReactNode;
+}
+
+type TabsKeys = '' | 'personal-info' | 'change-password';
+
+const tabsMapper = {
+    '': 0,
+    'personal-info': 1,
+    'change-password': 2
+};
+
+function getTabValue(): number {
+    const url = location.href;
+    const hashtagIndex = url.indexOf('#');
+    if (hashtagIndex !== -1) {
+        const key = url.substring(hashtagIndex + 1, url.length) as TabsKeys;
+        return tabsMapper[key || ''];
+    }
+
+    return 0;
+}
+
 export default class Profile extends React.Component<ProfileProps, ProfileState> {
 
     state: ProfileState = {
         loading: false,
-        user: null,
         anchorEl: null,
-        tabValue: 0
+        tabValue: getTabValue(),
+        error: ''
     };
 
-    componentDidMount = () => {
-        const { authToken, userId } = this.props;
+    componentDidMount() {
+        const { authToken, userId, setUser } = this.props;
 
         this.setState({ loading: true }, async () => {
             if (userId && authToken) {
                 const response = await getUser(userId, authToken);
                 if (response.success) {
-                    this.setState({ user: response.user, loading: false });
+                    setUser(response.user);
+                    this.setState({ loading: false });
                 } else {
-                    console.log('error fetching user', response.error);
+                    this.setState({ loading: false, error: errorMapper.PROFILE_ERROR_FETCHING_USER_DATA });
                 }
             }
         });
@@ -101,8 +125,10 @@ export default class Profile extends React.Component<ProfileProps, ProfileState>
     }
 
     handleLogout = () => {
+        // TODO find a better way to reset everything
         this.props.setAuthenticationToken(null);
         this.props.setUserId(null);
+        this.props.setUser(null);
 
         this.props.history.push('/');
     }
@@ -111,8 +137,13 @@ export default class Profile extends React.Component<ProfileProps, ProfileState>
         this.setState({ tabValue: newValue });
     }
 
+    handleClick = (tabName: string) => () => {
+        this.props.history.push(`/profile#${tabName}`);
+    }
+
     render() {
-        const { loading, user, anchorEl, tabValue } = this.state;
+        const { setUser, user } = this.props;
+        const { loading, anchorEl, tabValue, error } = this.state;
 
         return (
             <div className={theme.fullContainer}>
@@ -150,6 +181,7 @@ export default class Profile extends React.Component<ProfileProps, ProfileState>
                                     <CircularProgress size={80} />
                                 </div>
                             }
+                            {error &&  <ResultMessageBox type="error" message={error} />}
                             {user !== null &&
                                 <div className={theme.root}>
                                     <Tabs
@@ -161,15 +193,15 @@ export default class Profile extends React.Component<ProfileProps, ProfileState>
                                         centered={false}
                                         indicatorColor="primary"
                                     >
-                                        <CustomTab label="Account overview" className={theme.tab} {...this.a11yProps(0)} />
-                                        <CustomTab label="Personal information" {...this.a11yProps(1)} />
-                                        <CustomTab label="Change password" {...this.a11yProps(2)} />
+                                        <CustomTab label="Account overview" {...this.a11yProps(0)} onClick={this.handleClick('')} />
+                                        <CustomTab label="Personal information" {...this.a11yProps(1)} onClick={this.handleClick('personal-info')} />
+                                        <CustomTab label="Change password" {...this.a11yProps(2)} onClick={this.handleClick('change-password')} />
                                     </Tabs>
                                     <TabPanel value={tabValue} index={0}>
                                         <AccountOverview user={user} />
                                     </TabPanel>
                                     <TabPanel value={tabValue} index={1}>
-                                        <PersonalInfo user={user} />
+                                        <PersonalInfo user={user} authToken={this.props.authToken} onSetUser={setUser} />
                                     </TabPanel>
                                     <TabPanel value={tabValue} index={2}>
                                         <ChangePassword />

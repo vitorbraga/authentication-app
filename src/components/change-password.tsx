@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { errors } from '../utils/error-mapper';
+import { errorMapper } from '../utils/messages-mapper';
 import { checkValidPasswordResetToken, changePasswordWithToken } from '../modules/authentication/api';
 import ResultMessageBox from '../widgets/result-message-box';
 
@@ -54,10 +54,10 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
             if (response.success) {
                 this.setState({ tokenIsValid: true });
             } else {
-                this.setState({ tokenIsValid: false, tokenCheckError: errors[response.error] });
+                this.setState({ tokenIsValid: false, tokenCheckError: errorMapper[response.error] });
             }
         } else {
-            this.setState({ tokenIsValid: false, tokenCheckError: errors.PASSWORD_RESET_MISSING_TOKEN_USERID });
+            this.setState({ tokenIsValid: false, tokenCheckError: errorMapper.PASSWORD_RESET_MISSING_TOKEN_USERID });
         }
     }
 
@@ -69,12 +69,12 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
         const { newPassword, newPasswordRepeat } = this.state;
 
         if (!(newPassword && newPasswordRepeat)) {
-            this.setState({ submitError: errors.PASSWORD_RESET_REQUIRED_FIELDS });
+            this.setState({ submitError: errorMapper.PASSWORD_RESET_REQUIRED_FIELDS });
             return;
         }
 
         if (newPassword !== newPasswordRepeat) {
-            this.setState({ submitError: errors.PASSWORDS_DO_NOT_MATCH });
+            this.setState({ submitError: errorMapper.PASSWORDS_DO_NOT_MATCH });
             return;
         }
 
@@ -87,7 +87,7 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
             if (response.success) {
                 this.setState({ submitStage: 'success' });
             } else {
-                this.setState({ submitStage: 'initial', submitError: errors[response.error] });
+                this.setState({ submitStage: 'initial', submitError: errorMapper[response.error] });
             }
         });
     }

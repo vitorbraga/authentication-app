@@ -1,4 +1,4 @@
-import { Errors } from '../../utils/error-mapper';
+import { UserMessage } from '../../utils/messages-mapper';
 
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 
@@ -9,7 +9,7 @@ export type LoginResponse = {
 } | {
     success: false;
     jwt: never;
-    error: keyof Errors;
+    error: keyof UserMessage;
 };
 
 export type BaseResponse = {
@@ -17,7 +17,7 @@ export type BaseResponse = {
     error: never;
 } | {
     success: false;
-    error: keyof Errors;
+    error: keyof UserMessage;
 };
 
 export type PasswordRecoveryResponse = BaseResponse;

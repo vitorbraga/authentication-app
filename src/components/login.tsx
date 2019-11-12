@@ -15,7 +15,7 @@ import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { authenticate } from '../modules/authentication/api';
 import { JwtAuthToken } from '../modules/authentication/helpers';
-import { errors } from '../utils/error-mapper';
+import { errorMapper } from '../utils/messages-mapper';
 import ResultMessageBox from '../widgets/result-message-box';
 
 import * as theme from './login.scss';
@@ -43,7 +43,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         submitLoading: false
     };
 
-    isValidBeforeLogin = (): boolean => {
+    isValidBeforeLogin(): boolean {
         const { email, password } = this.state;
         if (!(email && password)) {
             return false;
@@ -67,11 +67,11 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 
                     this.props.history.push('/profile');
                 } else {
-                    this.setState({ loginError: errors[result.error], submitLoading: false });
+                    this.setState({ loginError: errorMapper[result.error], submitLoading: false });
                 }
             });
         } else {
-            this.setState({ loginError: errors.LOGIN_ENTER_EMAIL_PWD });
+            this.setState({ loginError: errorMapper.LOGIN_ENTER_EMAIL_PWD });
         }
     }
 

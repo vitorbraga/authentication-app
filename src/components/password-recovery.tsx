@@ -11,7 +11,7 @@ import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { passwordRecovery } from '../modules/authentication/api';
 import ResultMessageBox from '../widgets/result-message-box';
-import { errors } from '../utils/error-mapper';
+import { errorMapper, successMapper } from '../utils/messages-mapper';
 import { isEmail } from '../utils/validators';
 
 import * as theme from './password-recovery.scss';
@@ -46,7 +46,7 @@ export default class PasswordReset extends React.Component<PasswordResetProps, P
         const { email } = this.state;
         if (email) {
             if (!isEmail(email)) {
-                this.setState({ emailFieldError: errors.EMAIL_INVALID });
+                this.setState({ emailFieldError: errorMapper.EMAIL_INVALID });
                 return;
             }
 
@@ -55,11 +55,11 @@ export default class PasswordReset extends React.Component<PasswordResetProps, P
                 if (response.success) {
                     this.setState({ passwordResetProcessed: true, submitLoading: false });
                 } else {
-                    this.setState({ submitLoading: false, submitError: errors[response.error] });
+                    this.setState({ submitLoading: false, submitError: errorMapper[response.error] });
                 }
             });
         } else {
-            this.setState({ emailFieldError: errors.PASSWORD_RESET_MISSING_EMAIL });
+            this.setState({ emailFieldError: errorMapper.PASSWORD_RESET_MISSING_EMAIL });
         }
     }
 
@@ -79,12 +79,7 @@ export default class PasswordReset extends React.Component<PasswordResetProps, P
                     <p>Enter your e-mail address below. We'll send an email within a few minutes so you can create a new password.</p>
                     {submitError && <ResultMessageBox type="error" message={submitError} />}
                     {submitLoading && <div className={theme.loadingBox}><CircularProgress /></div>}
-                    {passwordResetProcessed &&
-                        <ResultMessageBox
-                            type="success"
-                            message="We sent a password reset link to your email address, which allows you to reset your password."
-                        />
-                    }
+                    {passwordResetProcessed && <ResultMessageBox type="success" message={successMapper.PASSWORD_RESET_EMAIL_SENT} />}
                     {!passwordResetProcessed &&
                         <div className={theme.form}>
                             <Grid container spacing={2}>
