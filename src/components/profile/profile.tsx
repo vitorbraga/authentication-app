@@ -199,7 +199,7 @@ export default class Profile extends React.Component<ProfileProps, ProfileState>
                                         <PersonalInfo user={user} authToken={this.props.authToken} onSetUser={setUser} />
                                     </TabPanel>
                                     <TabPanel value={tabValue} index={2}>
-                                        <ChangePassword />
+                                        <ChangePassword user={user} authToken={this.props.authToken} onSetUser={setUser} />
                                     </TabPanel>
                                 </div>
                             }

@@ -1,4 +1,4 @@
-import { LoginResponse, PasswordRecoveryResponse, CheckPasswordTokenResponse, ChangePasswordTokenResponse } from './model';
+import { LoginResponse, PasswordRecoveryResponse, CheckPasswordTokenResponse, ChangePasswordTokenResponse, ChangePasswordResponse } from './model';
 import { headersBuilder, serverBaseUrl } from '../../utils/api-helper';
 
 export const authenticate = async (username: string, password: string): Promise<LoginResponse> => {
@@ -32,6 +32,22 @@ export const changePasswordWithToken = async (newPassword: string, token: string
         body: JSON.stringify({ newPassword, token, userId })
     };
     const response = await fetch(`${serverBaseUrl}/auth/password-recovery`, options);
+    const data = await response.json();
+
+    return data;
+};
+
+export const changePassword = async (currentPassword: string, newPassword: string, authToken: string): Promise<ChangePasswordResponse> => {
+    const options = {
+        headers: headersBuilder()
+            .with('Content-Type', 'application/json')
+            .with('Accept', 'application/json')
+            .withJwt(authToken)
+            .build(),
+        method: 'POST',
+        body: JSON.stringify({ currentPassword, newPassword })
+    };
+    const response = await fetch(`${serverBaseUrl}/auth/change-password`, options);
     const data = await response.json();
 
     return data;

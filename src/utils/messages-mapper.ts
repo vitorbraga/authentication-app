@@ -32,7 +32,12 @@ export const errorMapper: UserMessage = {
     PASSWORD_RESET_ONGOING_RECOVERY_PROCESS: 'There is an ongoing password recovery process. You can start a new password recovery process each 5 hours.',
     PROFILE_ERROR_FETCHING_USER_DATA: 'Error fetching user data. Please try again.',
     UPDATE_USER_NOT_FOUND: 'User not found.',
-    UPDATE_REQUIRED_FIELD: 'This field is required.'
+    UPDATE_REQUIRED_FIELD: 'This field is required.',
+    CHANGE_PASSWORD_REQUIRED_FIELDS: 'Required fields.',
+    CHANGE_PASSWORD_MISSING_PASSWORDS: 'Missing passwords.',
+    CHANGE_PASSWORD_USER_NOT_FOUND: 'User not found.',
+    CHANGE_PASSWORD_INCORRECT_CURRENT_PASSWORD: 'Incorrect user password.',
+    CHANGE_PASSWORD_PASSWORD_COMPLEXITY: 'Password must be at least 6 characters and it must contain numbers and letters.'
 };
 
 export const successMapper: UserMessage = {

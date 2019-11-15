@@ -1,4 +1,5 @@
 import { UserMessage } from '../../utils/messages-mapper';
+import { User } from '../user/model';
 
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const USER_LOGOUT = 'USER_LOGOUT';
@@ -19,6 +20,16 @@ export type BaseResponse = {
 } | {
     success: false;
     error: keyof UserMessage;
+};
+
+export type ChangePasswordResponse = {
+    success: true;
+    user: User;
+    error: never;
+} | {
+    success: false;
+    user: never;
+    error: string;
 };
 
 export type PasswordRecoveryResponse = BaseResponse;
