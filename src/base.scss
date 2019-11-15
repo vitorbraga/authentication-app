@@ -12,3 +12,13 @@ $light-black: #7A7E80;
 
 $default-transition: 0.2s ease-out;
 $default-font-size: 12px;
+
+.nav-link {
+    color: $color-primary-main;
+    text-decoration: none;
+    font-size: 16px;
+    
+    &:hover {
+        text-decoration: underline;
+    }
+}

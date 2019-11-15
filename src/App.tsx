@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './store';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import Register from './components/register';
+import Page404 from './components/page-404';
 import RegisterSuccess from './components/register-success';
 import PrivateRoute from './utils/private-route';
 import ProfileContainer from './containers/ProfileContainer';
@@ -48,6 +49,7 @@ export default class App extends React.Component<{}, {}> {
                                     <Route path="/about" component={About} />
                                     <Route path="/password-recovery" component={PasswordRecovery} />
                                     <Route path="/change-password" component={ChangePassword} />
+                                    <Route component={Page404} />
                                 </Switch>
                             </div>
                         </MuiThemeProvider>

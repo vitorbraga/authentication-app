@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import Copyright from '../widgets/copyright';
+import Footer from '../widgets/footer';
 
 import * as theme from './home.scss';
 
@@ -33,17 +33,7 @@ export default class Home extends React.Component<{}, {}> {
                     </Toolbar>
                 </AppBar>
                 <div className={theme.centerContent} />
-                <footer className={theme.footer}>
-                    <nav className={theme.bottomNav}>
-                        <ul>
-                            <li><Link to={'/about'} className={theme.navLink}>About</Link></li>
-                            <li><Link to={'/contact'} className={theme.navLink}>Contact</Link></li>
-                            <li><Link to={'/terms'} className={theme.navLink}>Terms</Link></li>
-                            <li><Link to={'/privacy'} className={theme.navLink}>Privacy</Link></li>
-                        </ul>
-                    </nav>
-                    <Copyright />
-                </footer>
+                <Footer />
             </div>
         );
     }
