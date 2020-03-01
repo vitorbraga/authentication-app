@@ -52,10 +52,7 @@
             false
         ],
         "member-ordering": [
-            true,
-            {
-                "order": "instance-sandwich"
-            }
+            false
         ],
         "no-unused-expression": [true],
         "linebreak-style": [true, "LF"],

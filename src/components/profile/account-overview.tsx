@@ -9,8 +9,8 @@ interface AccountOverviewProps {
     user: User;
 }
 
-export default class AccountOverview extends React.Component<AccountOverviewProps, {}> {
-    render() {
+export default class AccountOverview extends React.PureComponent<AccountOverviewProps, never> {
+    public render() {
         const { user } = this.props;
         return (
             <div className={theme.contentBox}>

@@ -88,16 +88,16 @@ function getTabValue(): number {
     return 0;
 }
 
-export default class Profile extends React.Component<ProfileProps, ProfileState> {
+export default class Profile extends React.PureComponent<ProfileProps, ProfileState> {
 
-    state: ProfileState = {
+    public state: ProfileState = {
         loading: false,
         anchorEl: null,
         tabValue: getTabValue(),
         error: ''
     };
 
-    componentDidMount() {
+    public componentDidMount() {
         const { authToken, userId, setUser } = this.props;
 
         this.setState({ loading: true }, async () => {
@@ -113,30 +113,30 @@ export default class Profile extends React.Component<ProfileProps, ProfileState>
         });
     }
 
-    a11yProps = (index: number) => ({ id: `vertical-tab-${index}`});
+    private a11yProps = (index: number) => ({ id: `vertical-tab-${index}`});
 
-    handleOpenAccountMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    private handleOpenAccountMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
         this.setState({ anchorEl: event.currentTarget });
     }
 
-    handleCloseAccountMenu = () => {
+    private handleCloseAccountMenu = () => {
         this.setState({ anchorEl: null });
     }
 
-    handleLogout = () => {
+    private handleLogout = () => {
         this.props.userLogout();
         this.props.history.push('/');
     }
 
-    handleChangeTab = (event: any, newValue: number) => {
+    private handleChangeTab = (event: any, newValue: number) => {
         this.setState({ tabValue: newValue });
     }
 
-    handleClick = (tabName: string) => () => {
+    private handleClick = (tabName: string) => () => {
         this.props.history.push(`/profile#${tabName}`);
     }
 
-    render() {
+    public render() {
         const { setUser, user } = this.props;
         const { loading, anchorEl, tabValue, error } = this.state;
 

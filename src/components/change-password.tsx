@@ -33,9 +33,9 @@ interface ChangePasswordState {
     tokenCheckError: string;
 }
 
-export default class ChangePassword extends React.Component<ChangePasswordProps, ChangePasswordState> {
+export default class ChangePassword extends React.PureComponent<ChangePasswordProps, ChangePasswordState> {
 
-    state: ChangePasswordState = {
+    public state: ChangePasswordState = {
         newPassword: '',
         newPasswordRepeat: '',
         submitError: '',
@@ -44,7 +44,7 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
         submitStage: 'initial'
     };
 
-    componentDidMount = async () => {
+    public componentDidMount = async () => {
         document.title = 'Change password';
         const parsedUrl = qs.parse(this.props.location.search);
         const token = parsedUrl.token;
@@ -61,11 +61,11 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
         }
     }
 
-    handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ [field]: event.target.value } as Pick<ChangePasswordState, any>);
     }
 
-    handleSubmit = () => {
+    private handleSubmit = () => {
         const { newPassword, newPasswordRepeat } = this.state;
 
         if (!(newPassword && newPasswordRepeat)) {
@@ -92,7 +92,7 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
         });
     }
 
-    render() {
+    public render() {
         const { submitError, tokenIsValid, tokenCheckError, submitStage } = this.state;
         const loginUrl = `${appBaseUrl}/login`;
 

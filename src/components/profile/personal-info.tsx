@@ -32,9 +32,8 @@ interface FormFields {
     lastName: string;
 }
 
-export default class PersonalInfo extends React.Component<PersonalInfoProps, PersonalInfoState> {
-
-    state: PersonalInfoState = {
+export default class PersonalInfo extends React.PureComponent<PersonalInfoProps, PersonalInfoState> {
+    public state: PersonalInfoState = {
         firstName: this.props.user.firstName,
         lastName: this.props.user.lastName,
         submitLoading: false,
@@ -45,7 +44,7 @@ export default class PersonalInfo extends React.Component<PersonalInfoProps, Per
 
     // TODO method that resets all the fields and set only one
 
-    isValidBeforeSubmit(): ValidationError[] {
+    private isValidBeforeSubmit(): ValidationError[] {
         const validationErrors = ['firstName', 'lastName'].map((item: keyof FormFields) => {
             if (!this.state[item]) {
                 return { field: item, errorMessage: errorMapper.UPDATE_REQUIRED_FIELD };
@@ -60,11 +59,11 @@ export default class PersonalInfo extends React.Component<PersonalInfoProps, Per
         return [];
     }
 
-    handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ [field]: event.target.value, fieldErrors: [], updateSuccess: false } as Pick<PersonalInfoState, any>);
     }
 
-    handleSubmit = () => {
+    private handleSubmit = () => {
         const { authToken, user, onSetUser } = this.props;
         const { firstName, lastName } = this.state;
 
@@ -91,7 +90,7 @@ export default class PersonalInfo extends React.Component<PersonalInfoProps, Per
         }
     }
 
-    render() {
+    public render() {
         const { error, fieldErrors, firstName, lastName, submitLoading, updateSuccess } = this.state;
         const firstNameValidationError = fieldErrors.find((item) => item.field === 'firstName');
         const lastNameValidationError = fieldErrors.find((item) => item.field === 'lastName');

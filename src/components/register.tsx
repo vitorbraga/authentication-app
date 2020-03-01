@@ -37,9 +37,9 @@ interface FormFields {
     password: string;
 }
 
-export default class Register extends React.Component<RegisterProps, RegisterState> {
+export default class Register extends React.PureComponent<RegisterProps, RegisterState> {
 
-    state: RegisterState = {
+    public state: RegisterState = {
         firstName: '',
         lastName: '',
         email: '',
@@ -48,7 +48,7 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
         fieldErrors: []
     };
 
-    isValidBeforeSubmit(): ValidationError[] {
+    private isValidBeforeSubmit(): ValidationError[] {
         const validationErrors = ['firstName', 'lastName', 'email', 'password'].map((item: keyof FormFields) => {
             if (!this.state[item]) {
                 return { field: item, errorMessage: errorMapper.REGISTER_REQUIRED_FIELD };
@@ -73,11 +73,11 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
         return [];
     }
 
-    handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ [field]: event.target.value } as Pick<RegisterState, any>);
     }
 
-    handleSubmit = async () => {
+    private handleSubmit = async () => {
         const validationErrors = this.isValidBeforeSubmit();
         if (validationErrors.length === 0) {
             this.setState({ submitLoading: true }, async () => {
@@ -98,7 +98,7 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
         }
     }
 
-    render() {
+    public render() {
         const { fieldErrors, submitLoading } = this.state;
         const firstNameValidationError = fieldErrors.find((item) => item.field === 'firstName');
         const lastNameValidationError = fieldErrors.find((item) => item.field === 'lastName');

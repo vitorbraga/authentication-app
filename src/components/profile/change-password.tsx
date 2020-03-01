@@ -30,9 +30,8 @@ interface ChangePasswordState {
 const emptyInputs: Pick<ChangePasswordState, any> = { currentPassword: '', newPassword: '', newPasswordRepeat: '' };
 const resetFeedbacks: Pick<ChangePasswordState, any> = { updateSuccess: false, submitError: '' };
 
-export default class ChangePassword extends React.Component<ChangePasswordProps, ChangePasswordState> {
-
-    state: ChangePasswordState = {
+export default class ChangePassword extends React.PureComponent<ChangePasswordProps, ChangePasswordState> {
+    public state: ChangePasswordState = {
         currentPassword: '',
         newPassword: '',
         newPasswordRepeat: '',
@@ -41,11 +40,11 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
         updateSuccess: false
     };
 
-    handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ [field]: event.target.value, ...resetFeedbacks } as Pick<ChangePasswordState, any>);
     }
 
-    handleSubmit = () => {
+    private handleSubmit = () => {
         const { authToken, onSetUser } = this.props;
         const { currentPassword, newPassword, newPasswordRepeat } = this.state;
 
@@ -73,7 +72,7 @@ export default class ChangePassword extends React.Component<ChangePasswordProps,
         }
     }
 
-    render() {
+    public render() {
         const { submitError, submitLoading, updateSuccess } = this.state;
 
         return (

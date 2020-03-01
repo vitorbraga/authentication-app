@@ -32,7 +32,7 @@ const theme = createMuiTheme({
     }
 });
 
-export default class App extends React.Component<{}, {}> {
+export default class App extends React.Component<{}, never> {
     render() {
         return (
             <Provider store={store}>

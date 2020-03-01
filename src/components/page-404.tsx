@@ -7,9 +7,8 @@ import Footer from '../widgets/footer';
 
 import * as theme from './page-404.scss';
 
-export default class Page404 extends React.Component<{}, {}> {
-
-    render() {
+export default class Page404 extends React.PureComponent<{}, never> {
+    public render() {
         return (
             <div className={theme.root}>
                 <CssBaseline />

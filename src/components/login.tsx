@@ -34,16 +34,15 @@ interface LoginState {
     submitLoading: boolean;
 }
 
-export default class Login extends React.Component<LoginProps, LoginState> {
-
-    state: LoginState = {
+export default class Login extends React.PureComponent<LoginProps, LoginState> {
+    public state: LoginState = {
         email: '',
         password: '',
         loginError: null,
         submitLoading: false
     };
 
-    isValidBeforeLogin(): boolean {
+    private isValidBeforeLogin(): boolean {
         const { email, password } = this.state;
         if (!(email && password)) {
             return false;
@@ -52,11 +51,11 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         return true;
     }
 
-    handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ [field]: event.target.value } as Pick<LoginState, any>);
     }
 
-    handleSubmit = () => {
+    private handleSubmit = () => {
         if (this.isValidBeforeLogin()) {
             this.setState({ submitLoading: true, loginError: null }, async () => {
                 const result = await authenticate(this.state.email, this.state.password);
@@ -75,13 +74,13 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         }
     }
 
-    handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    private handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             this.handleSubmit();
         }
     }
 
-    render() {
+    public render() {
         const { loginError, submitLoading } = this.state;
 
         return (

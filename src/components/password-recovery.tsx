@@ -28,9 +28,9 @@ interface PasswordResetState {
     passwordResetProcessed: boolean;
 }
 
-export default class PasswordReset extends React.Component<PasswordResetProps, PasswordResetState> {
+export default class PasswordReset extends React.PureComponent<PasswordResetProps, PasswordResetState> {
 
-    state: PasswordResetState = {
+    public state: PasswordResetState = {
         email: '',
         emailFieldError: '',
         submitLoading: false,
@@ -38,11 +38,11 @@ export default class PasswordReset extends React.Component<PasswordResetProps, P
         passwordResetProcessed: false
     };
 
-    handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ [field]: event.target.value } as Pick<PasswordResetState, any>);
     }
 
-    handleSubmit = () => {
+    private handleSubmit = () => {
         const { email } = this.state;
         if (email) {
             if (!isEmail(email)) {
@@ -63,7 +63,7 @@ export default class PasswordReset extends React.Component<PasswordResetProps, P
         }
     }
 
-    render() {
+    public render() {
         const { submitLoading, passwordResetProcessed, submitError, emailFieldError } = this.state;
 
         return (

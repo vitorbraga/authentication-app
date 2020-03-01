@@ -20,8 +20,8 @@ const RegisterButton = withStyles(() => ({
     },
 }))(Button as any);
 
-export default class Home extends React.Component<{}, {}> {
-    render() {
+export default class Home extends React.PureComponent<{}, never> {
+    public render() {
         return (
             <div className={theme.fullContainer}>
                 <CssBaseline />
