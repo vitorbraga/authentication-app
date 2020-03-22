@@ -9,12 +9,10 @@ interface ResultMessageBoxProps {
     message?: string;
 }
 
-const ResultMessageBox: React.SFC<ResultMessageBoxProps> = ({ message, type, children }) => {
+export const ResultMessageBox: React.SFC<ResultMessageBoxProps> = ({ message, type, children }) => {
     return (
         <Box mt={2} className={classNames(theme.resultMessageBox, theme[type])}>
             {children || <span>{message}</span>}
         </Box>
     );
 };
-
-export default ResultMessageBox;

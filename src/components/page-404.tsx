@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Footer from '../widgets/footer';
+import { Footer } from '../widgets/footer';
 
 import * as theme from './page-404.scss';
 
-export default class Page404 extends React.PureComponent<{}, never> {
+export class Page404 extends React.PureComponent<{}, never> {
     public render() {
         return (
             <div className={theme.root}>

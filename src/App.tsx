@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
-import Home from './components/Home';
-import About from './components/About';
-import LoginContainer from './containers/LoginContainer';
+import { Home } from './components/Home';
+import { About} from './components/About';
+import { LoginContainer } from './containers/LoginContainer';
 import { Provider } from 'react-redux';
 import { store, persistor } from './store';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
-import Register from './components/register';
-import Page404 from './components/page-404';
-import RegisterSuccess from './components/register-success';
-import PrivateRoute from './utils/private-route';
-import ProfileContainer from './containers/ProfileContainer';
-import PasswordRecovery from './components/password-recovery';
-import ChangePassword from './components/change-password';
+import { Register } from './components/register';
+import { Page404 } from './components/page-404';
+import { RegisterSuccess } from './components/register-success';
+import { PrivateRouteContainer } from './utils/private-route';
+import { ProfileContainer } from './containers/ProfileContainer';
+import { PasswordRecovery } from './components/password-recovery';
+import { ChangePassword } from './components/change-password';
 
 const theme = createMuiTheme({
     palette: {
@@ -32,7 +32,7 @@ const theme = createMuiTheme({
     }
 });
 
-export default class App extends React.Component<{}, never> {
+export class App extends React.Component<{}, never> {
     render() {
         return (
             <Provider store={store}>
@@ -44,7 +44,7 @@ export default class App extends React.Component<{}, never> {
                                     <Route exact path="/" component={Home} />
                                     <Route path="/login" component={LoginContainer} />
                                     <Route path="/register" component={Register} />
-                                    <PrivateRoute path="/profile" component={ProfileContainer} />
+                                    <PrivateRouteContainer path="/profile" component={ProfileContainer} />
                                     <Route path="/register-success" component={RegisterSuccess} />
                                     <Route path="/about" component={About} />
                                     <Route path="/password-recovery" component={PasswordRecovery} />

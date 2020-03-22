@@ -9,7 +9,7 @@ interface AccountOverviewProps {
     user: User;
 }
 
-export default class AccountOverview extends React.PureComponent<AccountOverviewProps, never> {
+export class AccountOverview extends React.PureComponent<AccountOverviewProps, never> {
     public render() {
         const { user } = this.props;
         return (

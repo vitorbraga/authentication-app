@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 
 import * as theme from './footer.scss';
 
-const Footer = React.memo(() => {
+export const Footer = React.memo(() => {
     return (
         <footer className={theme.footer}>
             <nav className={theme.bottomNav}>
@@ -21,5 +21,3 @@ const Footer = React.memo(() => {
         </footer>
     );
 });
-
-export default Footer;

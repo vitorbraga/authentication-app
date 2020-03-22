@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export default class RegisterSuccess extends React.PureComponent<{}, never> {
+export class RegisterSuccess extends React.PureComponent<{}, never> {
     public render() {
         return (
             <div>

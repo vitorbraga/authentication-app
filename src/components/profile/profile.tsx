@@ -18,10 +18,10 @@ import { withStyles } from '@material-ui/core/styles';
 import { TypographyProps } from '@material-ui/system';
 import { User } from '../../modules/user/model';
 import { getUser } from '../../modules/user/api';
-import AccountOverview from './account-overview';
-import PersonalInfo from './personal-info';
-import ChangePassword from './change-password';
-import ResultMessageBox from '../../widgets/result-message-box';
+import { AccountOverview } from './account-overview';
+import { PersonalInfo } from './personal-info';
+import { ChangePassword } from './change-password';
+import { ResultMessageBox } from '../../widgets/result-message-box';
 import { errorMapper } from '../../utils/messages-mapper';
 
 import * as theme from './profile.scss';
@@ -88,7 +88,7 @@ function getTabValue(): number {
     return 0;
 }
 
-export default class Profile extends React.PureComponent<ProfileProps, ProfileState> {
+export class Profile extends React.PureComponent<ProfileProps, ProfileState> {
 
     public state: ProfileState = {
         loading: false,

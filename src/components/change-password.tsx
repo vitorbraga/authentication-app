@@ -11,7 +11,7 @@ import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { errorMapper } from '../utils/messages-mapper';
 import { checkValidPasswordResetToken, changePasswordWithToken } from '../modules/authentication/api';
-import ResultMessageBox from '../widgets/result-message-box';
+import { ResultMessageBox } from '../widgets/result-message-box';
 
 import * as theme from './change-password.scss';
 import { appBaseUrl } from '../utils/api-helper';
@@ -33,7 +33,7 @@ interface ChangePasswordState {
     tokenCheckError: string;
 }
 
-export default class ChangePassword extends React.PureComponent<ChangePasswordProps, ChangePasswordState> {
+export class ChangePassword extends React.PureComponent<ChangePasswordProps, ChangePasswordState> {
 
     public state: ChangePasswordState = {
         newPassword: '',

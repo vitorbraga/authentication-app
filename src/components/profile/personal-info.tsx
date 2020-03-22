@@ -8,7 +8,7 @@ import { User } from '../../modules/user/model';
 import { errorMapper, ValidationError, successMapper } from '../../utils/messages-mapper';
 import { notUndefined } from '../../utils/common-helper';
 import { updateUser } from '../../modules/user/api';
-import ResultMessageBox from '../../widgets/result-message-box';
+import { ResultMessageBox } from '../../widgets/result-message-box';
 
 import * as theme from './personal-info.scss';
 
@@ -32,7 +32,7 @@ interface FormFields {
     lastName: string;
 }
 
-export default class PersonalInfo extends React.PureComponent<PersonalInfoProps, PersonalInfoState> {
+export class PersonalInfo extends React.PureComponent<PersonalInfoProps, PersonalInfoState> {
     public state: PersonalInfoState = {
         firstName: this.props.user.firstName,
         lastName: this.props.user.lastName,

@@ -10,36 +10,36 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { passwordRecovery } from '../modules/authentication/api';
-import ResultMessageBox from '../widgets/result-message-box';
+import { ResultMessageBox } from '../widgets/result-message-box';
 import { errorMapper, successMapper } from '../utils/messages-mapper';
 import { isEmail } from '../utils/validators';
 
 import * as theme from './password-recovery.scss';
 
-interface PasswordResetProps {
+interface PasswordRecoveryProps {
     history: History<LocationState>;
 }
 
-interface PasswordResetState {
+interface PasswordRecoveryState {
     email: string;
     emailFieldError: string;
     submitLoading: boolean;
     submitError: string;
-    passwordResetProcessed: boolean;
+    passwordRecoveryProcessed: boolean;
 }
 
-export default class PasswordReset extends React.PureComponent<PasswordResetProps, PasswordResetState> {
+export class PasswordRecovery extends React.PureComponent<PasswordRecoveryProps, PasswordRecoveryState> {
 
-    public state: PasswordResetState = {
+    public state: PasswordRecoveryState = {
         email: '',
         emailFieldError: '',
         submitLoading: false,
         submitError: '',
-        passwordResetProcessed: false
+        passwordRecoveryProcessed: false
     };
 
     private handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ [field]: event.target.value } as Pick<PasswordResetState, any>);
+        this.setState({ [field]: event.target.value } as Pick<PasswordRecoveryState, any>);
     }
 
     private handleSubmit = () => {
@@ -53,7 +53,7 @@ export default class PasswordReset extends React.PureComponent<PasswordResetProp
             this.setState({ submitLoading: true, emailFieldError: '', submitError: '' }, async () => {
                 const response = await passwordRecovery(email);
                 if (response.success) {
-                    this.setState({ passwordResetProcessed: true, submitLoading: false });
+                    this.setState({ passwordRecoveryProcessed: true, submitLoading: false });
                 } else {
                     this.setState({ submitLoading: false, submitError: errorMapper[response.error] });
                 }
@@ -64,7 +64,7 @@ export default class PasswordReset extends React.PureComponent<PasswordResetProp
     }
 
     public render() {
-        const { submitLoading, passwordResetProcessed, submitError, emailFieldError } = this.state;
+        const { submitLoading, passwordRecoveryProcessed, submitError, emailFieldError } = this.state;
 
         return (
             <Container component="main" maxWidth="xs">
@@ -79,8 +79,8 @@ export default class PasswordReset extends React.PureComponent<PasswordResetProp
                     <p>Enter your e-mail address below. We'll send an email within a few minutes so you can create a new password.</p>
                     {submitError && <ResultMessageBox type="error" message={submitError} />}
                     {submitLoading && <div className={theme.loadingBox}><CircularProgress /></div>}
-                    {passwordResetProcessed && <ResultMessageBox type="success" message={successMapper.PASSWORD_RESET_EMAIL_SENT} />}
-                    {!passwordResetProcessed &&
+                    {passwordRecoveryProcessed && <ResultMessageBox type="success" message={successMapper.PASSWORD_RESET_EMAIL_SENT} />}
+                    {!passwordRecoveryProcessed &&
                         <div className={theme.form}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>

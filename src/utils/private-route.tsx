@@ -5,12 +5,12 @@ import { isAuthenticated } from '../modules/authentication/helpers';
 import { authToken } from '../modules/authentication/selector';
 import { AppState } from '../store';
 
-export interface ProtectedRouteProps extends RouteProps {
+interface ProtectedRouteProps extends RouteProps {
     authToken: string | null;
     authenticationPath: string;
 }
 
-export class PrivateRoute extends Route<ProtectedRouteProps> {
+class PrivateRoute extends Route<ProtectedRouteProps> {
     render() {
         let redirectPath: string = '';
         if (!isAuthenticated(this.props.authToken)) {
@@ -31,4 +31,4 @@ const mapStateToProps = (state: AppState) => ({
     authenticationPath: '/login'
 });
 
-export default connect(mapStateToProps)(PrivateRoute);
+export const PrivateRouteContainer = connect(mapStateToProps)(PrivateRoute);

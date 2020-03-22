@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import Login from '../components/login';
+import { Login } from '../components/login';
 import { AppState } from '../store';
 import { authToken } from '../modules/authentication/selector';
 import { setAuthToken } from '../modules/authentication/actions';
@@ -15,4 +15,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     setUserId: (userId: number | null) => dispatch(setUserId(userId))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export const LoginContainer = connect(mapStateToProps, mapDispatchToProps)(Login);

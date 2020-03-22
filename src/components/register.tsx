@@ -37,7 +37,7 @@ interface FormFields {
     password: string;
 }
 
-export default class Register extends React.PureComponent<RegisterProps, RegisterState> {
+export class Register extends React.PureComponent<RegisterProps, RegisterState> {
 
     public state: RegisterState = {
         firstName: '',

@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import Footer from '../widgets/footer';
+import { Footer } from '../widgets/footer';
 
 import * as theme from './home.scss';
 
@@ -20,7 +20,7 @@ const RegisterButton = withStyles(() => ({
     },
 }))(Button as any);
 
-export default class Home extends React.PureComponent<{}, never> {
+export class Home extends React.PureComponent<{}, never> {
     public render() {
         return (
             <div className={theme.fullContainer}>

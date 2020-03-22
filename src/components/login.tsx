@@ -16,7 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { authenticate } from '../modules/authentication/api';
 import { JwtAuthToken } from '../modules/authentication/helpers';
 import { errorMapper } from '../utils/messages-mapper';
-import ResultMessageBox from '../widgets/result-message-box';
+import { ResultMessageBox } from '../widgets/result-message-box';
 
 import * as theme from './login.scss';
 
@@ -34,7 +34,7 @@ interface LoginState {
     submitLoading: boolean;
 }
 
-export default class Login extends React.PureComponent<LoginProps, LoginState> {
+export class Login extends React.PureComponent<LoginProps, LoginState> {
     public state: LoginState = {
         email: '',
         password: '',

@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import ResultMessageBox from '../../widgets/result-message-box';
+import { ResultMessageBox } from '../../widgets/result-message-box';
 import { errorMapper } from '../../utils/messages-mapper';
 import { User } from '../../modules/user/model';
 import { changePassword } from '../../modules/authentication/api';
@@ -30,7 +30,7 @@ interface ChangePasswordState {
 const emptyInputs: Pick<ChangePasswordState, any> = { currentPassword: '', newPassword: '', newPasswordRepeat: '' };
 const resetFeedbacks: Pick<ChangePasswordState, any> = { updateSuccess: false, submitError: '' };
 
-export default class ChangePassword extends React.PureComponent<ChangePasswordProps, ChangePasswordState> {
+export class ChangePassword extends React.PureComponent<ChangePasswordProps, ChangePasswordState> {
     public state: ChangePasswordState = {
         currentPassword: '',
         newPassword: '',
