@@ -16,10 +16,10 @@ export const registerUser = async (user: UserRegister): Promise<User | FieldWith
 
     if (userRegisterResponse.success) {
         return userRegisterResponse.user;
-    } else if (userRegisterResponse.fields) {
+    } else if ('fields' in userRegisterResponse) {
         return userRegisterResponse.fields;
     } else {
-        throw new Error(errorMapper[userRegisterResponse.error!]);
+        throw new Error(errorMapper[userRegisterResponse.error]);
     }
 };
 
@@ -40,10 +40,10 @@ export const updateUser = async (userId: number, user: UserUpdate, authToken: st
 
     if (userUpdateResponse.success) {
         return userUpdateResponse.user;
-    } else if (userUpdateResponse.fields) {
+    } else if ('fields' in userUpdateResponse) {
         return userUpdateResponse.fields;
     } else {
-        throw new Error(errorMapper[userUpdateResponse.error!]);
+        throw new Error(errorMapper[userUpdateResponse.error]);
     }
 };
 

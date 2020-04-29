@@ -30,25 +30,15 @@ export interface FieldWithError {
     };
 }
 
-// FIXME try to use this
-// export type UserRegisterResponse = {
-//     success: true;
-//     user: User;
-// } | {
-//     success: false;
-//     fields: FieldWithError[];
-// } | {
-//     success: false;
-//     error: string;
-// };
-
 export type UserRegisterResponse = {
     success: true;
     user: User;
 } | {
     success: false;
-    fields?: FieldWithError[];
-    error?: string;
+    fields: FieldWithError[];
+} | {
+    success: false;
+    error: string;
 };
 
 export type UserUpdateResponse = UserRegisterResponse;
