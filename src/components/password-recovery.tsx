@@ -51,11 +51,11 @@ export class PasswordRecovery extends React.PureComponent<PasswordRecoveryProps,
             }
 
             this.setState({ submitLoading: true, emailFieldError: '', submitError: '' }, async () => {
-                const response = await passwordRecovery(email);
-                if (response.success) {
+                try {
+                    await passwordRecovery(email);
                     this.setState({ passwordRecoveryProcessed: true, submitLoading: false });
-                } else {
-                    this.setState({ submitLoading: false, submitError: errorMapper[response.error] });
+                } catch (error) {
+                    this.setState({ submitLoading: false, submitError: error });
                 }
             });
         } else {

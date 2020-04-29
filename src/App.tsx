@@ -13,7 +13,7 @@ import { RegisterSuccess } from './components/register-success';
 import { PrivateRouteContainer } from './utils/private-route';
 import { ProfileContainer } from './containers/ProfileContainer';
 import { PasswordRecovery } from './components/password-recovery';
-import { ChangePassword } from './components/change-password';
+import { ChangePasswordWithToken } from './components/change-password-with-token';
 
 const theme = createMuiTheme({
     palette: {
@@ -48,7 +48,7 @@ export class App extends React.Component<{}, never> {
                                     <Route path="/register-success" component={RegisterSuccess} />
                                     <Route path="/about" component={About} />
                                     <Route path="/password-recovery" component={PasswordRecovery} />
-                                    <Route path="/change-password" component={ChangePassword} />
+                                    <Route path="/change-password" component={ChangePasswordWithToken} />
                                     <Route component={Page404} />
                                 </Switch>
                             </div>

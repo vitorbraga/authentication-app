@@ -23,21 +23,32 @@ export interface User {
     updatedAt: string;
 }
 
+export interface FieldWithError {
+    field: string;
+    constraints: {
+        [type: string]: string;
+    };
+}
+
+// FIXME try to use this
+// export type UserRegisterResponse = {
+//     success: true;
+//     user: User;
+// } | {
+//     success: false;
+//     fields: FieldWithError[];
+// } | {
+//     success: false;
+//     error: string;
+// };
+
 export type UserRegisterResponse = {
     success: true;
     user: User;
-    error: never;
-    fields: never;
 } | {
     success: false;
-    user: never;
+    fields?: FieldWithError[];
     error?: string;
-    fields?: {
-        field: string;
-        constraints: {
-            [type: string]: string;
-        };
-    }[];
 };
 
 export type UserUpdateResponse = UserRegisterResponse;

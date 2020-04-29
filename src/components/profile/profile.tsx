@@ -22,7 +22,6 @@ import { AccountOverview } from './account-overview';
 import { PersonalInfo } from './personal-info';
 import { ChangePassword } from './change-password';
 import { ResultMessageBox } from '../../widgets/result-message-box';
-import { errorMapper } from '../../utils/messages-mapper';
 
 import * as theme from './profile.scss';
 
@@ -101,14 +100,14 @@ export class Profile extends React.PureComponent<ProfileProps, ProfileState> {
         const { authToken, userId, setUser } = this.props;
 
         this.setState({ loading: true }, async () => {
-            if (userId && authToken) {
-                const response = await getUser(userId, authToken);
-                if (response.success) {
-                    setUser(response.user);
+            try {
+                if (userId && authToken) {
+                    const user = await getUser(userId, authToken);
+                    setUser(user);
                     this.setState({ loading: false });
-                } else {
-                    this.setState({ loading: false, error: errorMapper.PROFILE_ERROR_FETCHING_USER_DATA });
                 }
+            } catch (error) {
+                this.setState({ loading: false, error: error.message });
             }
         });
     }

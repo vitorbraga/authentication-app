@@ -13,7 +13,7 @@ import { errorMapper } from '../utils/messages-mapper';
 import { checkValidPasswordResetToken, changePasswordWithToken } from '../modules/authentication/api';
 import { ResultMessageBox } from '../widgets/result-message-box';
 
-import * as theme from './change-password.scss';
+import * as theme from './change-password-with-token.scss';
 import { appBaseUrl } from '../utils/api-helper';
 
 interface MatchParams {
@@ -33,7 +33,7 @@ interface ChangePasswordState {
     tokenCheckError: string;
 }
 
-export class ChangePassword extends React.PureComponent<ChangePasswordProps, ChangePasswordState> {
+export class ChangePasswordWithToken extends React.PureComponent<ChangePasswordProps, ChangePasswordState> {
 
     public state: ChangePasswordState = {
         newPassword: '',
@@ -49,12 +49,13 @@ export class ChangePassword extends React.PureComponent<ChangePasswordProps, Cha
         const parsedUrl = qs.parse(this.props.location.search);
         const token = parsedUrl.token;
         const userId = parsedUrl.u;
+
         if (token && userId) {
-            const response = await checkValidPasswordResetToken(token.toString(), userId.toString());
-            if (response.success) {
+            try {
+                await checkValidPasswordResetToken(token.toString(), userId.toString());
                 this.setState({ tokenIsValid: true });
-            } else {
-                this.setState({ tokenIsValid: false, tokenCheckError: errorMapper[response.error] });
+            } catch (error) {
+                this.setState({ tokenIsValid: false, tokenCheckError: error.message });
             }
         } else {
             this.setState({ tokenIsValid: false, tokenCheckError: errorMapper.PASSWORD_RESET_MISSING_TOKEN_USERID });
@@ -82,12 +83,12 @@ export class ChangePassword extends React.PureComponent<ChangePasswordProps, Cha
             const parsedUrl = qs.parse(this.props.location.search);
             const token = parsedUrl.token;
             const userId = parsedUrl.u;
-            const response = await changePasswordWithToken(newPassword, token!.toString(), userId!.toString());
 
-            if (response.success) {
+            try {
+                await changePasswordWithToken(newPassword, token!.toString(), userId!.toString());
                 this.setState({ submitStage: 'success' });
-            } else {
-                this.setState({ submitStage: 'initial', submitError: errorMapper[response.error] });
+            } catch (error) {
+                this.setState({ submitStage: 'initial', submitError: error.message });
             }
         });
     }

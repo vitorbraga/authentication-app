@@ -60,13 +60,12 @@ export class ChangePassword extends React.PureComponent<ChangePasswordProps, Cha
 
         if (authToken !== null) {
             this.setState({ submitLoading: true, ...resetFeedbacks }, async () => {
-                const response = await changePassword(currentPassword, newPassword, authToken);
-
-                if (response.success) {
-                    onSetUser(response.user);
+                try {
+                    const user = await changePassword(currentPassword, newPassword, authToken);
+                    onSetUser(user);
                     this.setState({ submitLoading: false, updateSuccess: true, ...emptyInputs });
-                } else {
-                    this.setState({ submitLoading: false, updateSuccess: false, submitError: errorMapper[response.error] });
+                } catch (error) {
+                    this.setState({ submitLoading: false, updateSuccess: false, submitError: error });
                 }
             });
         }

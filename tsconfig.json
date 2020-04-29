@@ -10,7 +10,13 @@
       "sourceMap": true,
       "noUnusedLocals": true,
       "strictNullChecks": true,
-      "target": "es2017"
+      "target": "es2017",
+      "plugins": [
+        {
+          "transform": "typescript-is/lib/transform-inline/transformer",
+          "ignoreMethods": true
+        }
+      ]
     },
     "include": [
       "./src/**/**/*"

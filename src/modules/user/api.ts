@@ -1,19 +1,29 @@
-import { UserRegister, UserRegisterResponse, GetUserResponse, UserUpdate, UserUpdateResponse } from './model';
+import { UserRegister, UserRegisterResponse, GetUserResponse, UserUpdate, UserUpdateResponse, User, FieldWithError } from './model';
 import { headersBuilder, serverBaseUrl } from '../../utils/api-helper';
+import { assertType } from 'typescript-is';
+import { errorMapper } from '../../utils/messages-mapper';
 
-export const registerUser = async (user: UserRegister): Promise<UserRegisterResponse> => {
+export const registerUser = async (user: UserRegister): Promise<User | FieldWithError[]> => {
     const options = {
         headers: headersBuilder().with('Content-Type', 'application/json').with('Accept', 'application/json').build(),
         method: 'POST',
         body: JSON.stringify(user)
     };
-    const response = await fetch(`${serverBaseUrl}/user`, options);
-    const data = await response.json();
 
-    return data;
+    const response: Response = await fetch(`${serverBaseUrl}/user`, options);
+    const data = await response.json();
+    const userRegisterResponse: UserRegisterResponse = assertType<UserRegisterResponse>(data);
+
+    if (userRegisterResponse.success) {
+        return userRegisterResponse.user;
+    } else if (userRegisterResponse.fields) {
+        return userRegisterResponse.fields;
+    } else {
+        throw new Error(errorMapper[userRegisterResponse.error!]);
+    }
 };
 
-export const updateUser = async (userId: number, user: UserUpdate, authToken: string): Promise<UserUpdateResponse> => {
+export const updateUser = async (userId: number, user: UserUpdate, authToken: string): Promise<User | FieldWithError[]> => {
     const options = {
         headers: headersBuilder()
             .with('Content-Type', 'application/json')
@@ -23,22 +33,32 @@ export const updateUser = async (userId: number, user: UserUpdate, authToken: st
         method: 'PATCH',
         body: JSON.stringify(user)
     };
-    const response = await fetch(`${serverBaseUrl}/user/${userId}`, options);
-    const data = await response.json();
 
-    return data;
+    const response: Response = await fetch(`${serverBaseUrl}/user/${userId}`, options);
+    const data = await response.json();
+    const userUpdateResponse: UserUpdateResponse = assertType<UserUpdateResponse>(data);
+
+    if (userUpdateResponse.success) {
+        return userUpdateResponse.user;
+    } else if (userUpdateResponse.fields) {
+        return userUpdateResponse.fields;
+    } else {
+        throw new Error(errorMapper[userUpdateResponse.error!]);
+    }
 };
 
-export const getUser = async (userId: number, authToken: string): Promise<GetUserResponse> => {
-    try {
-        const options = {
-            headers: headersBuilder().withJwt(authToken).build()
-        };
-        const response = await fetch(`${serverBaseUrl}/user/${userId}`, options);
-        const data = await response.json();
+export const getUser = async (userId: number, authToken: string): Promise<User> => {
+    const options = {
+        headers: headersBuilder().withJwt(authToken).build()
+    };
 
-        return data;
-    } catch (error) {
-        return { success: false } as GetUserResponse;
+    const response: Response = await fetch(`${serverBaseUrl}/user/${userId}`, options);
+    const data = await response.json();
+    const userResponse: GetUserResponse = assertType<GetUserResponse>(data);
+
+    if (userResponse.success) {
+        return userResponse.user;
+    } else {
+        throw new Error(errorMapper[userResponse.error]);
     }
 };

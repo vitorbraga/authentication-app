@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { is } from 'typescript-is';
 import { History, LocationState } from 'history';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -14,6 +15,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { checkPasswordComplexity, isEmail } from '../utils/validators';
 import { errorMapper, ValidationError } from '../utils/messages-mapper';
 import { notUndefined } from '../utils/common-helper';
+import { User } from '../modules/user/model';
 
 import * as theme from './register.scss';
 
@@ -81,16 +83,23 @@ export class Register extends React.PureComponent<RegisterProps, RegisterState> 
         const validationErrors = this.isValidBeforeSubmit();
         if (validationErrors.length === 0) {
             this.setState({ submitLoading: true }, async () => {
-                const registerResponse = await registerUser(this.state);
-                if (registerResponse.success) {
-                    this.props.history.push('/register-success');
-                } else {
-                    if (registerResponse.fields && registerResponse.fields.length > 0) {
-                        const errors = registerResponse.fields.map((item) => {
-                            return { field: item.field, errorMessage: errorMapper[Object.values(item.constraints)[0]] };
-                        });
-                        this.setState({ submitLoading: false, fieldErrors: errors });
+                try {
+                    const userOrFieldsWithErrors = await registerUser(this.state);
+                    if (is<User>(userOrFieldsWithErrors)) {
+                        this.props.history.push('/register-success');
+                    } else {
+                        const fieldsWithErrors = userOrFieldsWithErrors;
+                        if (fieldsWithErrors.length > 0) {
+                            const errors = fieldsWithErrors.map((item) => {
+                                return { field: item.field, errorMessage: errorMapper[Object.values(item.constraints)[0]] };
+                            });
+                            this.setState({ submitLoading: false, fieldErrors: errors });
+                        }
                     }
+                } catch (error) {
+                    // TODO add error message (generic error messages that do not belong to fields)
+                    // TODO Add state property and show on the top of the form
+                    this.setState({ submitLoading: false, fieldErrors: [] });
                 }
             });
         } else {

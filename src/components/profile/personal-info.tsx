@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { is } from 'typescript-is';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -70,19 +71,24 @@ export class PersonalInfo extends React.PureComponent<PersonalInfoProps, Persona
         const validationErrors = this.isValidBeforeSubmit();
         if (validationErrors.length === 0 && authToken !== null) {
             this.setState({ submitLoading: true }, async () => {
-                const registerResponse = await updateUser(user.id, { firstName, lastName }, authToken);
-                if (registerResponse.success) {
-                    onSetUser(registerResponse.user);
-                    this.setState({ submitLoading: false, updateSuccess: true, error: '' });
-                } else {
-                    if (registerResponse.fields && registerResponse.fields.length > 0) {
-                        const errors = registerResponse.fields.map((item) => {
-                            return { field: item.field, errorMessage: errorMapper[Object.values(item.constraints)[0]] };
-                        });
-                        this.setState({ submitLoading: false, updateSuccess: false, fieldErrors: errors, error: '' });
-                    } else if (registerResponse.error) {
-                        this.setState({ submitLoading: false, updateSuccess: false, error: errorMapper[registerResponse.error], fieldErrors: [] });
+                try {
+                    const userOrFieldsWithError = await updateUser(user.id, { firstName, lastName }, authToken);
+
+                    if (is<User>(userOrFieldsWithError)) {
+                        const user = userOrFieldsWithError;
+                        onSetUser(user);
+                        this.setState({ submitLoading: false, updateSuccess: true, error: '' });
+                    } else {
+                        const fieldsWithError = userOrFieldsWithError;
+                        if (fieldsWithError.length > 0) {
+                            const errors = fieldsWithError.map((item) => {
+                                return { field: item.field, errorMessage: errorMapper[Object.values(item.constraints)[0]] };
+                            });
+                            this.setState({ submitLoading: false, updateSuccess: false, fieldErrors: errors, error: '' });
+                        }
                     }
+                } catch (error) {
+                    this.setState({ submitLoading: false, updateSuccess: false, error, fieldErrors: [] });
                 }
             });
         } else {

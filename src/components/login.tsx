@@ -58,15 +58,15 @@ export class Login extends React.PureComponent<LoginProps, LoginState> {
     private handleSubmit = () => {
         if (this.isValidBeforeLogin()) {
             this.setState({ submitLoading: true, loginError: null }, async () => {
-                const result = await authenticate(this.state.email, this.state.password);
-                if (result.success) {
-                    const decoded = jwtDecode<JwtAuthToken>(result.jwt);
-                    this.props.setAuthenticationToken(result.jwt);
+                try {
+                    const authenticationToken = await authenticate(this.state.email, this.state.password);
+                    const decoded = jwtDecode<JwtAuthToken>(authenticationToken);
+                    this.props.setAuthenticationToken(authenticationToken);
                     this.props.setUserId(decoded.userId);
 
                     this.props.history.push('/profile');
-                } else {
-                    this.setState({ loginError: errorMapper[result.error], submitLoading: false });
+                } catch (error) {
+                    this.setState({ submitLoading: false, loginError: error.message });
                 }
             });
         } else {
