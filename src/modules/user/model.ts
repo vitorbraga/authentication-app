@@ -46,10 +46,8 @@ export type UserUpdateResponse = UserRegisterResponse;
 export type GetUserResponse = {
     success: true;
     user: User;
-    error: never;
 } | {
     success: false;
-    user: never;
     error: string;
 };
 
